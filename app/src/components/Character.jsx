@@ -1,24 +1,25 @@
-class Equipment {
-    constructor(name, type, effect) {
-        this.name = name;
-        this.type = type;
-        this.effect = effect;
-    }
-}
+import { Weapon } from './Item.jsx';
 
 class Character {
     constructor(name, hp, dmg) {
         this.name = name;
         this.hp = hp;
         this.dmg = dmg;
-        this.inventory = [];
         this.level = 1;
         this.xp = 0;
+        this.inventory = [];
     }
 
     addItem(item) {
-        this.inventory.push(item);
-        return `${this.name} picks up ${item.name}!`;
+        if (item instanceof Weapon) {
+            this.equip(item);
+            this.equippedWeapon = item;
+            // this.dmg = this.dmg + item.effect
+            return `${item.name} equipped! Damage increased to ${this.dmg}.`;
+        } else {
+            this.inventory.push(item);
+            return `${item.name} added to inventory.`;
+        }
     }
 
     useItem(itemName, target) {
@@ -35,12 +36,13 @@ class Character {
     }
 
     equip(item) {
-        if (item.type === "weapon") {
-            this.dmg += item.effect;
-        } else if (item.type === "armor") {
-            this.hp += item.effect;
+        if (item.type === 'weapon') {
+            this.equippedWeapon = item;
+            this.dmg = this.dmg + item.effect;
+             // or set this.dmg to item.dmg if you prefer
+            return `Equipped ${item.name}`;
         }
-        return `${this.name} equips ${item.name}, ${item.type} bonus: ${item.effect}.`;
+        return `Cannot equip ${item.name}`;
     }
 
     attack(target) {
@@ -57,6 +59,38 @@ class Character {
         }
     }
 
+    levelUp() {
+        this.level++;
+        this.hp += 10;
+        this.dmg += 5;
+        this.xp = 0;
+        return `${this.name} levels up to level ${this.level}!`;
+    }
+}
+
+class Player extends Character {
+    constructor(name, hp, dmg, special) {
+        super(name, hp, dmg);
+        this.special = special;
+        this.inventory = [];
+        this.quests = [];
+        this.equippedWeapon = null;
+    }
+
+    addQuest(quest) {
+        this.quests.push(quest);
+        return `${this.name} has received a new quest: ${quest.name}`;
+    }
+
+    completeQuest(questName) {
+        const quest = this.quests.find(q => q.name === questName);
+        if (quest && !quest.isComplete) {
+            return quest.completeQuest(this);
+        } else {
+            return `Quest not found or already completed.`;
+        }
+    }
+
     gainXP(amount) {
         this.xp += amount;
         if (this.xp >= this.level * 10) {
@@ -65,19 +99,14 @@ class Character {
         return `${this.name} gains ${amount} xp.`;
     }
 
-    levelUp() {
-        this.level++;
-        this.hp += 10;
-        this.dmg += 5;
-        this.xp = 0;
-        return `${this.name} levels up to level ${this.level}! hp is now ${this.hp}, dmg is now ${this.dmg}.`;
-    }
-}
-
-class Player extends Character {
-    constructor(name, hp, dmg, special) {
-        super(name, hp, dmg);
-        this.special = special;
+    equip(item) {
+        if (item.type === 'weapon') {
+            this.equippedWeapon = item;
+            this.dmg = this.dmg + item.effect;
+             // or set this.dmg to item.dmg if you prefer
+            return `Equipped ${item.name}`;
+        }
+        return `Cannot equip ${item.name}`;
     }
 
     useSpecial(target) {
@@ -97,4 +126,4 @@ class Enemy extends Character {
     }
 }
 
-export { Player, Enemy, Equipment, Character };
+export { Player, Enemy, Character };
