@@ -1,4 +1,4 @@
-import { Weapon } from './Item.jsx';
+import { Weapon, Armor } from './Item.jsx';
 
 class Character {
     constructor(name, hp, dmg) {
@@ -8,15 +8,24 @@ class Character {
         this.level = 1;
         this.xp = 0;
         this.inventory = [];
+        this.equippedWeapon = null;
+        this.equippedArmor = null;
     }
 
     addItem(item) {
-        if (item instanceof Weapon) {
-            this.equip(item);
+        if (item instanceof Weapon) {           
+            this.dmg += item.weaponDmg;
             this.equippedWeapon = item;
-            // this.dmg = this.dmg + item.effect
-            return `${item.name} equipped! Damage increased to ${this.dmg}.`;
-        } else {
+            return `${this.equippedWeapon.name} equipped! Damage increased to ${this.dmg}.`;
+        } else if (item instanceof Armor) {
+            this.hp += item.armor;
+            this.equippedArmor = item;
+            return `${this.equippedArmor.name} equipped! HP increased to ${this.hp}.`;
+        } else if (this.inventory.find(i => i.name === item.name)) {
+            return `${item.name} already in inventory.`;
+        }
+        
+        else {
             this.inventory.push(item);
             return `${item.name} added to inventory.`;
         }
@@ -33,16 +42,6 @@ class Character {
         } else {
             return `${itemName} not found in inventory.`;
         }
-    }
-
-    equip(item) {
-        if (item.type === 'weapon') {
-            this.equippedWeapon = item;
-            this.dmg = this.dmg + item.effect;
-             // or set this.dmg to item.dmg if you prefer
-            return `Equipped ${item.name}`;
-        }
-        return `Cannot equip ${item.name}`;
     }
 
     attack(target) {
@@ -74,7 +73,6 @@ class Player extends Character {
         this.special = special;
         this.inventory = [];
         this.quests = [];
-        this.equippedWeapon = null;
     }
 
     addQuest(quest) {

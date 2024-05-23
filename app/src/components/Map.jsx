@@ -1,6 +1,3 @@
-// import Item from './Item';
-// import { Enemy } from './Character';
-
 class Map {
     constructor(width, height) {
         this.width = width;
