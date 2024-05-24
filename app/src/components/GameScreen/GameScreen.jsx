@@ -116,9 +116,9 @@ export default function GameScreen() {
     return (
         <>
             <div>
-                <StatBox />
                 <div className='gameBox'>
                     <div className='statScreen'>
+                    <StatBox player={player} enemy={enemy} />
                         <div className='stats'>
                             <h2>Player Stats</h2>
                             <p>Name: {player.name}</p>

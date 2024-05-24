@@ -1,14 +1,11 @@
 import './StatBox.css'
 import { Player, Enemy } from '../Character'
+import PropTypes from 'prop-types'
 
-const StatBox = () => {
-    const player = new Player("Ally", 150, 10, "Teleport Strike");
-    const enemy = new Enemy("Matt", 100, 5, "Fire");
-
+const StatBox = ({player, enemy}) => {
   return (
     <>
         <div className="statBox">
-                    <h1>Stats Component</h1>
                     <div className='stats'>
                             <h2>Player Stats</h2>
                             <p>Name: {player.name}</p>
@@ -26,6 +23,11 @@ const StatBox = () => {
                 </div>
     </>    
   )
+}
+
+StatBox.propTypes = {
+    player: PropTypes.instanceOf(Player),
+    enemy: PropTypes.instanceOf(Enemy)
 }
 
 export default StatBox
