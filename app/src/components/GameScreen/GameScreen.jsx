@@ -12,11 +12,12 @@ import Debug from '../Debug/Debug';
 
 export default function GameScreen() {
     const [player, setPlayer] = useState(new Player("Ally", 150, 10, "Teleport Strike"));
-    const [enemy, setEnemy] = useState(new Enemy("Matt", 100, 5, "Fire"));
+    const [enemy, setEnemy] = useState(null); // No active enemy initially
     const [log, setLog] = useState([]);
     const [inventory, setInventory] = useState([]);
     const [map, setMap] = useState(new Map(15, 15)); // Initialize with proper dimensions
     const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
+    const [inBattle, setInBattle] = useState(false); // Battle state
 
     const updateLog = (message) => {
         setLog(prevLog => [...prevLog, message]);
@@ -45,6 +46,11 @@ export default function GameScreen() {
     }, [map]);
 
     const handleMove = (dx, dy) => {
+        if (inBattle) {
+            updateLog("You can't move during a battle!");
+            return;
+        }
+
         const newX = playerPosition.x + dx;
         const newY = playerPosition.y + dy;
         if (map.isValidPosition(newX, newY)) {
@@ -57,27 +63,50 @@ export default function GameScreen() {
                     map.removeItem(newX, newY);
                 } else if (itemOrEnemy instanceof Enemy) {
                     updateLog("You encountered an enemy!");
+                    setEnemy(itemOrEnemy);
+                    setInBattle(true); // Start battle
                 }
             }
         }
     };
 
     const handleAction = (actionType) => {
+        if (!inBattle) {
+            updateLog("No enemy to fight!");
+            return;
+        }
+
         switch (actionType) {
             case 'attack':
                 updateLog(player.attack(enemy));
-                if (enemy.hp > 0) {
-                    updateLog(enemy.attack(player));
-                } else {
+                if (enemy.hp <= 0) {
                     updateLog(player.completeQuest("Defeat Matt"));
+                    setInBattle(false); // End battle
+                    removeEnemyFromMap(enemy); // Remove enemy from map
+                    setEnemy(null);
+                } else {
+                    updateLog(enemy.attack(player));
+                    if (player.hp <= 0) {
+                        updateLog("You have been defeated!");
+                        setInBattle(false); // End battle
+                        // Handle player defeat (e.g., reset game or respawn)
+                    }
                 }
                 break;
             case 'special':
                 updateLog(player.useSpecial(enemy));
-                if (enemy.hp > 0) {
-                    updateLog(enemy.attack(player));
-                } else {
+                if (enemy.hp <= 0) {
                     updateLog(player.completeQuest("Defeat Matt"));
+                    setInBattle(false); // End battle
+                    removeEnemyFromMap(enemy); // Remove enemy from map
+                    setEnemy(null);
+                } else {
+                    updateLog(enemy.attack(player));
+                    if (player.hp <= 0) {
+                        updateLog("You have been defeated!");
+                        setInBattle(false); // End battle
+                        // Handle player defeat (e.g., reset game or respawn)
+                    }
                 }
                 break;
             case 'usePotion':
@@ -90,6 +119,13 @@ export default function GameScreen() {
                 break;
             default:
                 break;
+        }
+    };
+
+    const removeEnemyFromMap = (enemy) => {
+        const enemyPosition = map.findItemPosition(enemy);
+        if (enemyPosition) {
+            map.removeItem(enemyPosition.x, enemyPosition.y);
         }
     };
 
@@ -117,23 +153,11 @@ export default function GameScreen() {
         return rows;
     };
 
-    const groupInventoryItems = (inventory) => {
-        const itemMap = inventory.reduce((acc, item) => {
-            if (acc[item.name]) {
-                acc[item.name].count += 1;
-            } else {
-                acc[item.name] = { item, count: 1 };
-            }
-            return acc;
-        }, {});
-        return Object.values(itemMap);
-    };
-
     return (
         <>
             <div className='gameScreen'>
                 <div className='defaultDiv'>
-                    <StatBox player={player} enemy={enemy} />
+                    <StatBox player={player} enemy={enemy} inBattle={inBattle} />
                     <Controls 
                         playerPosition={playerPosition} 
                         handleMove={handleMove} 
@@ -146,7 +170,7 @@ export default function GameScreen() {
                 </div> 
                 <LogBox log={log} />
             </div>
-            <Debug player={player}/>
+            <Debug player={player} inventory={inventory} />
         </>
     );
 }

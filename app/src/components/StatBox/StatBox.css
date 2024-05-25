@@ -1,6 +1,6 @@
 .statBox {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     padding: 5px;
     border-radius: 5px;
@@ -9,7 +9,16 @@
     margin-bottom: 100px;
 }
 
-.stats, .enemyStats {
+.stats {
+    display: flex;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.enemyStats {
+    background-color: #ff0000;
     border: 1px solid #000;
     border-radius: 5px;
     padding: 5px;

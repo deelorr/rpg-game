@@ -33,6 +33,17 @@ class Map {
             this.grid[y][x] = null;
         }
     }
+
+    findItemPosition(item) {
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                if (this.grid[y][x] === item) {
+                    return { x, y };
+                }
+            }
+        }
+        return null;
+    }
 }
 
 export default Map;

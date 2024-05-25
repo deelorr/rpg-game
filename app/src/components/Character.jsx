@@ -1,4 +1,4 @@
-import { Weapon, Armor, Item } from './Item';
+import { Weapon, Armor } from './Item';
 
 class Character {
     constructor(name, hp, dmg) {
