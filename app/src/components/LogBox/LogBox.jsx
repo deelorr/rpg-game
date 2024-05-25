@@ -4,8 +4,8 @@ import './LogBox.css'
 const LogBox = ({log}) => {
   return (
     <>
-      <div className='logScreen'>
-        <div className='logBox'>
+      <div className='logContainer'>
+        <div className='innerLogContainer'>
           <div className='logContent'>
             {log.map((entry, index) => <p key={index}>{entry}</p>)}
           </div>

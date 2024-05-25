@@ -10,8 +10,9 @@ const Inventory = ({player, inventory}) => {
                 {inventory.map((item, index) => <p key={index}>{item.name}</p>)}
             </div>
             <div className='equippedBox'>
-                <p>Equipped Weapon: {player.equippedWeapon?.name || "None"}</p>
-                <p>Equipped Armor: {player.equippedArmor?.name || "None"}</p>
+                <h2>Equipped:</h2>
+                <p>Weapon: {player.equippedWeapon?.name || "None"}</p>
+                <p>Armor: {player.equippedArmor?.name || "None"}</p>
             </div>
         </div>
     </>

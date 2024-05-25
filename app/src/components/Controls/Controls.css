@@ -1,0 +1,40 @@
+.controlBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    margin-top: 10px;
+    border: black solid 1px;
+    border-radius: 5px;
+    height: 200px;
+    margin-top: 100px;
+}
+
+.controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    border: black solid 1px;
+    border-radius: 5px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    border: black solid 1px;
+    border-radius: 5px;
+}
+
+button {
+    padding: 5px;
+    margin: 5px;
+    border-radius: 5px;
+    border: black solid 1px;
+    background-color: #f0f0f0;
+}

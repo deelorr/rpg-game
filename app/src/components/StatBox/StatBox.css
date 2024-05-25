@@ -1,12 +1,12 @@
 .statBox {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: fit-content;
+    flex-direction: row;
+    justify-content: space-between;
     padding: 5px;
-    background-color: greenyellow;
     border-radius: 5px;
+    border: black 1px solid;
+    height: 250px;
+    margin-bottom: 100px;
 }
 
 .stats, .enemyStats {

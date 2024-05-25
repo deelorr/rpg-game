@@ -1,10 +1,15 @@
 .gameScreen {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
     border: #000 solid 1px;
     border-radius: 5px;
     margin: 10px;
     padding: 10px;
+}
+
+.defaultDiv {
+    display: flex;
+    flex-direction: column;
 }

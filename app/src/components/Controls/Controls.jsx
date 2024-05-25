@@ -3,7 +3,7 @@ import { Item } from '../Item';
 import PropTypes from 'prop-types';
 import './Controls.css';
 
-const Controls = ({playerPosition, handleMove, handleAction}) => {
+const Controls = ({handleMove, handleAction}) => {
     
   return (
     <>
@@ -14,7 +14,6 @@ const Controls = ({playerPosition, handleMove, handleAction}) => {
             <button onClick={() => handleMove(1, 0)}>Move Right</button>
             <button onClick={() => handleMove(0, -1)}>Move Up</button>
             <button onClick={() => handleMove(0, 1)}>Move Down</button>
-            <p>Player position: {playerPosition.x}, {playerPosition.y}</p>
         </div>
         <div className='buttons'>
             <button onClick={() => handleAction('attack')}>Attack</button>

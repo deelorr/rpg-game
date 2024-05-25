@@ -1,10 +1,10 @@
-.logScreen {
-    height: 200px;
-    width: 60%;
+.logContainer {
+    height: 680px;
+    width: 275px;
     color: #001f3f;
 }
 
-.logBox {
+.innerLogContainer {
     overflow: auto;
     height: 100%;
     display: flex;

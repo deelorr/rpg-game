@@ -14,7 +14,7 @@ export default function GameScreen() {
     const [enemy, setEnemy] = useState(new Enemy("Matt", 100, 5, "Fire"));
     const [log, setLog] = useState([]);
     const [inventory, setInventory] = useState([]);
-    const [map, setMap] = useState(new Map(5, 5)); // Initialize with proper dimensions
+    const [map, setMap] = useState(new Map(15, 15)); // Initialize with proper dimensions
     const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
 
     const updateLog = (message) => {
@@ -120,7 +120,7 @@ export default function GameScreen() {
     return (
         <>
             <div className='gameScreen'>
-                <div>
+                <div className='defaultDiv'>
                     <StatBox player={player} enemy={enemy} 
                     />
                     <Controls 
@@ -130,12 +130,10 @@ export default function GameScreen() {
                     />
                 </div>
                 <div>
-                    <MapComponent renderGrid={renderGrid} />
+                    <MapComponent renderGrid={renderGrid} playerPosition={playerPosition} />
                     <Inventory player={player} inventory={inventory}/>
-                </div>
-                <div> 
-                    <LogBox log={log} />
-                </div>
+                </div> 
+                <LogBox log={log} />
             </div>
         </>
     );

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 const StatBox = ({player, enemy}) => {
   return (
     <>
-      <div className="statBox">
+      <div className='statBox'>
         <div className='stats'>
           <h2>Player Stats</h2>
           <p>Name: {player.name}</p>
