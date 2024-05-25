@@ -26,23 +26,12 @@ const Controls = ({handleMove, handleAction}) => {
 }
 
 Controls.propTypes = {
-    player: PropTypes.instanceOf(Player).isRequired,
-    enemy: PropTypes.instanceOf(Enemy).isRequired,
-    map: PropTypes.shape({
-        isValidPosition: PropTypes.func.isRequired,
-        getItem: PropTypes.func.isRequired,
-        removeItem: PropTypes.func.isRequired,
-    }).isRequired,
     playerPosition: PropTypes.shape({
         x: PropTypes.number.isRequired,
         y: PropTypes.number.isRequired,
     }).isRequired,
     handleMove: PropTypes.func.isRequired,
-    handleAction: PropTypes.func.isRequired,
-    log: PropTypes.arrayOf(PropTypes.string).isRequired,
-    updateLog: PropTypes.func.isRequired,
-    inventory: PropTypes.arrayOf(PropTypes.instanceOf(Item)).isRequired,
-    setInventory: PropTypes.func.isRequired,
+    handleAction: PropTypes.func.isRequired
 };
 
 export default Controls

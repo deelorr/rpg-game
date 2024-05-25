@@ -8,6 +8,7 @@ import Controls from '../Controls/Controls';
 import LogBox from '../LogBox/LogBox';
 import Inventory from '../Inventory/Inventory';
 import MapComponent from '../MapComponent/MapComponent';
+import Debug from '../Debug/Debug';
 
 export default function GameScreen() {
     const [player, setPlayer] = useState(new Player("Ally", 150, 10, "Teleport Strike"));
@@ -52,7 +53,7 @@ export default function GameScreen() {
             if (itemOrEnemy) {
                 if (itemOrEnemy instanceof Item) {
                     updateLog(player.addItem(itemOrEnemy));
-                    setInventory([...inventory, itemOrEnemy]);
+                    setInventory([...player.inventory]); // Ensure state update with new array
                     map.removeItem(newX, newY);
                 } else if (itemOrEnemy instanceof Enemy) {
                     updateLog("You encountered an enemy!");
@@ -83,9 +84,8 @@ export default function GameScreen() {
                 if (!inventory.some(item => item.name === "Potion")) {
                     updateLog("No potions in inventory.");
                 } else {
-                    player.useItem("Potion", player);
-                    updateLog("You used a potion!");
-                    setInventory(inventory.filter(item => item.name !== "Potion"));
+                    updateLog(player.useItem("Potion", player));
+                    setInventory([...player.inventory]); // Ensure state update with new array
                 }
                 break;
             default:
@@ -117,12 +117,23 @@ export default function GameScreen() {
         return rows;
     };
 
+    const groupInventoryItems = (inventory) => {
+        const itemMap = inventory.reduce((acc, item) => {
+            if (acc[item.name]) {
+                acc[item.name].count += 1;
+            } else {
+                acc[item.name] = { item, count: 1 };
+            }
+            return acc;
+        }, {});
+        return Object.values(itemMap);
+    };
+
     return (
         <>
             <div className='gameScreen'>
                 <div className='defaultDiv'>
-                    <StatBox player={player} enemy={enemy} 
-                    />
+                    <StatBox player={player} enemy={enemy} />
                     <Controls 
                         playerPosition={playerPosition} 
                         handleMove={handleMove} 
@@ -131,10 +142,11 @@ export default function GameScreen() {
                 </div>
                 <div>
                     <MapComponent renderGrid={renderGrid} playerPosition={playerPosition} />
-                    <Inventory player={player} inventory={inventory}/>
+                    <Inventory player={player} inventory={inventory} />
                 </div> 
                 <LogBox log={log} />
             </div>
+            <Debug player={player}/>
         </>
     );
 }

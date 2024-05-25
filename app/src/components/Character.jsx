@@ -1,4 +1,4 @@
-import { Weapon, Armor } from './Item.jsx';
+import { Weapon, Armor, Item } from './Item';
 
 class Character {
     constructor(name, hp, dmg) {
@@ -13,36 +13,40 @@ class Character {
     }
 
     addItem(item) {
-        if (item instanceof Weapon) {           
+        if (item instanceof Weapon) {
             this.dmg += item.weaponDmg;
             this.equippedWeapon = item;
+            this.inventory.push(item);
             return `${this.equippedWeapon.name} equipped! Damage increased to ${this.dmg}.`;
         } else if (item instanceof Armor) {
             this.hp += item.armor;
             this.equippedArmor = item;
+            this.inventory.push(item);
             return `${this.equippedArmor.name} equipped! HP increased to ${this.hp}.`;
-        } else if (this.inventory.find(i => i.name === item.name)) {
-            return `${item.name} already in inventory.`;
-        }
-        
-        else {
+        } else {
             this.inventory.push(item);
             return `${item.name} added to inventory.`;
         }
     }
 
     useItem(itemName, target) {
-        let item = this.inventory.find(i => i.name === itemName);
-        if (item) {
+        console.log('Inventory before using item:', this.inventory);
+        const itemIndex = this.inventory.findIndex(i => i.name === itemName);
+        if (itemIndex > -1) {
+            const item = this.inventory[itemIndex];
             item.use(target);
             if (item.isConsumable) {
-                this.inventory = this.inventory.filter(i => i.name !== itemName);
+                this.inventory.splice(itemIndex, 1); // Remove the used item from the inventory
             }
+            console.log('Inventory after using item:', this.inventory);
             return `${target.name} uses ${item.name}.`;
         } else {
+            console.log('Inventory after using item:', this.inventory);
             return `${itemName} not found in inventory.`;
         }
     }
+    
+    
 
     attack(target) {
         target.takeDmg(this.dmg);
@@ -54,7 +58,7 @@ class Character {
         if (this.hp <= 0) {
             return `${this.name} takes ${amount} damage and has been defeated.`;
         } else {
-            return `${this.name} takes ${amount} damage. hp is now ${this.hp}.`;
+            return `${this.name} takes ${amount} damage. HP is now ${this.hp}.`;
         }
     }
 
@@ -98,13 +102,17 @@ class Player extends Character {
     }
 
     equip(item) {
-        if (item.type === 'weapon') {
+        if (item instanceof Weapon) {
+            this.dmg += item.weaponDmg;
             this.equippedWeapon = item;
-            this.dmg = this.dmg + item.effect;
-             // or set this.dmg to item.dmg if you prefer
-            return `Equipped ${item.name}`;
+            return `Equipped ${item.name}. Damage increased to ${this.dmg}.`;
+        } else if (item instanceof Armor) {
+            this.hp += item.armor;
+            this.equippedArmor = item;
+            return `Equipped ${item.name}. HP increased to ${this.hp}.`;
+        } else {
+            return `Cannot equip ${item.name}.`;
         }
-        return `Cannot equip ${item.name}`;
     }
 
     useSpecial(target) {
