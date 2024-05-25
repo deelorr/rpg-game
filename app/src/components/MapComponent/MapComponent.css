@@ -1,0 +1,47 @@
+.mapBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    border: #000 solid 1px;
+    border-radius: 5px;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+
+td {
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    border: 1px solid black;
+}
+
+
+.player {
+    background-color: yellow;
+}
+
+.armor {
+    background-color: orange;
+}
+
+.weapon {
+    background-color: green;
+}
+
+.item {
+    background-color: blue;
+}
+
+.enemy {
+    background-color: red;
+}
+
+.plainTile {
+    background-color: tan;
+}

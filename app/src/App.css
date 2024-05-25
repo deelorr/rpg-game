@@ -3,3 +3,12 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+.title {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    margin: 10px;
+    font-size: 1.5em;
+    color: #000;
+}

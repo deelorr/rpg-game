@@ -1,9 +1,13 @@
 import { Player, Enemy } from '../Character';
 import { useState, useEffect } from 'react';
 import { Item, Weapon, Armor } from '../Item';
-import  Map  from '../Map';
+import Map from '../Map'; // Map class
 import './GameScreen.css';
 import StatBox from '../StatBox/StatBox';
+import Controls from '../Controls/Controls';
+import LogBox from '../LogBox/LogBox';
+import Inventory from '../Inventory/Inventory';
+import MapComponent from '../MapComponent/MapComponent';
 
 export default function GameScreen() {
     const [player, setPlayer] = useState(new Player("Ally", 150, 10, "Teleport Strike"));
@@ -115,66 +119,24 @@ export default function GameScreen() {
 
     return (
         <>
-            <div>
-                <div className='gameBox'>
-                    <div className='statScreen'>
-                    <StatBox player={player} enemy={enemy} />
-                        <div className='stats'>
-                            <h2>Player Stats</h2>
-                            <p>Name: {player.name}</p>
-                            <p>HP: {player.hp}</p>
-                            <p>DMG: {player.dmg}</p>
-                            <p>Special: {player.special}</p>
-                            <p>Level: {player.level}</p>
-                        </div>
-                        <div className='stats'>
-                            <h2>Enemy Stats</h2>
-                            <p>Name: {enemy.name}</p>
-                            <p>HP: {enemy.hp}</p>
-                            <p>DMG: {enemy.dmg}</p>
-                        </div>
-                        <div className='buttons'>
-                            <button onClick={() => handleAction('attack')}>Attack</button>
-                            <button onClick={() => handleAction('special')}>Use Special</button>
-                            <button onClick={() => handleAction('usePotion')}>Use Potion</button>
-                        </div>
-                        <div className='logScreen'>
-                            <div className='logBox'>
-                                <div className='logContent'>
-                                    {log.map((entry, index) => <p key={index}>{entry}</p>)}
-                                </div>
-                            </div>
-                        </div>
-                        <div className='inventoryBox'>
-                            <div className='inventory'>
-                                <h2>Inventory:</h2>
-                                {inventory.map((item, index) => <p key={index}>{item.name}</p>)}
-                            </div>
-                            <div className='equippedBox'>
-                                <p>Equipped Weapon: {player.equippedWeapon?.name || "None"}</p>
-                                <p>Equipped Armor: {player.equippedArmor?.name || "None"}</p>
-                            </div>
-                        </div>
-                        <div className='mapBox'>
-                            <h2>Map</h2>
-                            <table>
-                                <tbody>
-                                    {renderGrid()}
-                                </tbody>
-                            </table>
-                            <div className='controls'>
-                                <h2>Controls</h2>
-                                <button onClick={() => handleMove(-1, 0)}>Move Left</button>
-                                <button onClick={() => handleMove(1, 0)}>Move Right</button>
-                                <button onClick={() => handleMove(0, -1)}>Move Up</button>
-                                <button onClick={() => handleMove(0, 1)}>Move Down</button>
-                                <p>Player position: {playerPosition.x}, {playerPosition.y}</p>
-                            </div>
-                        </div>
-                    </div>
+            <div className='gameScreen'>
+                <div>
+                    <StatBox player={player} enemy={enemy} 
+                    />
+                    <Controls 
+                        playerPosition={playerPosition} 
+                        handleMove={handleMove} 
+                        handleAction={handleAction}
+                    />
+                </div>
+                <div>
+                    <MapComponent renderGrid={renderGrid} />
+                    <Inventory player={player} inventory={inventory}/>
+                </div>
+                <div> 
+                    <LogBox log={log} />
                 </div>
             </div>
         </>
-
     );
 }

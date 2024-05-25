@@ -1,0 +1,28 @@
+.inventoryBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    border: #000 solid 1px;
+    border-radius: 5px;
+}
+
+.inventory {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.equippedBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    border: #000 solid 1px;
+    border-radius: 5px;
+}
