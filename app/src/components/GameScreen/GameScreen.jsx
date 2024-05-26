@@ -8,6 +8,7 @@ import Controls from '../Controls/Controls';
 import LogBox from '../LogBox/LogBox';
 import Inventory from '../Inventory/Inventory';
 import MapComponent from '../MapComponent/MapComponent';
+import Store from '../Store/Store';
 import Debug from '../Debug/Debug';
 
 export default function GameScreen() {
@@ -18,29 +19,28 @@ export default function GameScreen() {
     const [map, setMap] = useState(new Map(15, 15)); // Initialize with proper dimensions
     const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
     const [inBattle, setInBattle] = useState(false); // Battle state
+    const [storeOpen, setStoreOpen] = useState(false); // Store state
+
+    const storeItems = [
+        new Item("Potion", (target) => { target.hp += 50; }, true, 10),
+        new Weapon("Sword", (target) => { target.hp -= 15; }, 15, 50),
+        new Armor("Shield", (target) => { target.hp += 20; }, 20, 50)
+    ];
 
     const updateLog = (message) => {
         setLog(prevLog => [...prevLog, message]);
     };
 
     useEffect(() => {
-        const sword = new Weapon("Sword", (target) => {
-            target.hp -= 10;
-        }, 10);
-
-        const shield = new Armor("Shield", (target) => {
-            target.hp += 50;
-        }, 50);
 
         const potion = new Item("Potion", (target) => {
             target.hp += 50;
         }, true);
 
-        map.placeItem(sword, 1, 1);
-        map.placeItem(shield, 1, 2);
         map.placeEnemy(new Enemy("Matt", 100, 5, "Fire"), 4, 4);
-        map.placeItem(potion, 2, 2);
+        map.placeItem(potion, 2, 1);
         map.placeItem(potion, 4, 2);
+        map.placeItem("store", 3, 3); // Add store tile
 
         updateLog("Game started!");
     }, [map]);
@@ -65,6 +65,9 @@ export default function GameScreen() {
                     updateLog("You encountered an enemy!");
                     setEnemy(itemOrEnemy);
                     setInBattle(true); // Start battle
+                } else if (itemOrEnemy === "store") {
+                    updateLog("You found a store!");
+                    setStoreOpen(true); // Open store
                 }
             }
         }
@@ -72,7 +75,24 @@ export default function GameScreen() {
 
     const handleAction = (actionType) => {
         if (!inBattle) {
-            updateLog("No enemy to fight!");
+            switch (actionType) {
+                case 'attack':
+                    updateLog("No enemy to attack!");
+                    break;
+                case 'special':
+                    updateLog("No enemy to use special on!");
+                    break;
+                case 'usePotion':
+                    if (!inventory.some(item => item.name === "Potion")) {
+                        updateLog("No potions in inventory.");
+                    } else {
+                        updateLog(player.useItem("Potion", player));
+                        setInventory([...player.inventory]); // Ensure state update with new array
+                    }
+                    break;
+                default:
+                    break;
+            }
             return;
         }
 
@@ -129,6 +149,27 @@ export default function GameScreen() {
         }
     };
 
+    const handleBuyItem = (item) => {
+        if (player.gold >= item.price) {
+            player.gold -= item.price;
+            updateLog(`Bought ${item.name} for ${item.price} gold.`);
+            player.addItem(item);
+            setInventory([...player.inventory]); // Update inventory state
+        } else {
+            updateLog("Not enough gold.");
+        }
+    };
+
+    const closeStore = () => {
+        setStoreOpen(false);
+        updateLog("Left the store.");
+    };
+
+    const addGold = () => {
+        player.gold += 100;
+        updateLog("Added 100 gold.");
+    };
+
     const renderGrid = () => {
         const rows = [];
         for (let y = 0; y < map.height; y++) {
@@ -144,6 +185,8 @@ export default function GameScreen() {
                     cells.push(<td key={`${x},${y}`} className="item">I</td>);
                 } else if (map.grid[y][x] instanceof Enemy) {
                     cells.push(<td key={`${x},${y}`} className="enemy">E</td>);
+                } else if (map.grid[y][x] === "store") {
+                    cells.push(<td key={`${x},${y}`} className="store">S</td>);
                 } else {
                     cells.push(<td key={`${x},${y}`} className="plainTile"></td>);
                 }
@@ -156,21 +199,30 @@ export default function GameScreen() {
     return (
         <>
             <div className='gameScreen'>
-                <div className='defaultDiv'>
-                    <StatBox player={player} enemy={enemy} inBattle={inBattle} />
-                    <Controls 
-                        playerPosition={playerPosition} 
-                        handleMove={handleMove} 
-                        handleAction={handleAction}
+                {!storeOpen && (
+                    <div className='defaultDiv'>
+                        <StatBox player={player} enemy={enemy} inBattle={inBattle} />
+                        <Controls 
+                            playerPosition={playerPosition} 
+                            handleMove={handleMove} 
+                            handleAction={handleAction}
+                        />
+                    </div>
+                )}
+                {storeOpen && (
+                    <Store 
+                        items={storeItems} 
+                        buyItem={handleBuyItem} 
+                        closeStore={closeStore} 
                     />
-                </div>
+                )}
                 <div>
                     <MapComponent renderGrid={renderGrid} playerPosition={playerPosition} />
                     <Inventory player={player} inventory={inventory} />
                 </div> 
                 <LogBox log={log} />
             </div>
-            <Debug player={player} inventory={inventory} />
+            <Debug player={player} addGold={addGold} />
         </>
     );
 }

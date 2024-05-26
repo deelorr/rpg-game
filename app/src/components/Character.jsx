@@ -16,12 +16,10 @@ class Character {
         if (item instanceof Weapon) {
             this.dmg += item.weaponDmg;
             this.equippedWeapon = item;
-            this.inventory.push(item);
             return `${this.equippedWeapon.name} equipped! Damage increased to ${this.dmg}.`;
         } else if (item instanceof Armor) {
             this.hp += item.armor;
             this.equippedArmor = item;
-            this.inventory.push(item);
             return `${this.equippedArmor.name} equipped! HP increased to ${this.hp}.`;
         } else {
             this.inventory.push(item);
@@ -30,7 +28,6 @@ class Character {
     }
 
     useItem(itemName, target) {
-        console.log('Inventory before using item:', this.inventory);
         const itemIndex = this.inventory.findIndex(i => i.name === itemName);
         if (itemIndex > -1) {
             const item = this.inventory[itemIndex];
@@ -38,15 +35,11 @@ class Character {
             if (item.isConsumable) {
                 this.inventory.splice(itemIndex, 1); // Remove the used item from the inventory
             }
-            console.log('Inventory after using item:', this.inventory);
             return `${target.name} uses ${item.name}.`;
         } else {
-            console.log('Inventory after using item:', this.inventory);
             return `${itemName} not found in inventory.`;
         }
     }
-    
-    
 
     attack(target) {
         target.takeDmg(this.dmg);
@@ -75,8 +68,8 @@ class Player extends Character {
     constructor(name, hp, dmg, special) {
         super(name, hp, dmg);
         this.special = special;
-        this.inventory = [];
         this.quests = [];
+        this.gold = 100; // Initial gold for player
     }
 
     addQuest(quest) {

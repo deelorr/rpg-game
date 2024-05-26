@@ -1,0 +1,8 @@
+.storeBox {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    border: black 1px solid;
+    border-radius: 5px;
+}
