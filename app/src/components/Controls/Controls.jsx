@@ -1,5 +1,3 @@
-import { Player, Enemy } from '../Character';
-import { Item } from '../Item';
 import PropTypes from 'prop-types';
 import './Controls.css';
 

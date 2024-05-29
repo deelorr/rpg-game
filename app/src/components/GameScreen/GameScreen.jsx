@@ -1,15 +1,17 @@
-import { Player, Enemy } from '../Character';
 import { useState, useEffect } from 'react';
+import { Player, Enemy, NPC } from '../Character';
 import { Item, Weapon, Armor } from '../Item';
-import Map from '../Map'; // Map class
-import './GameScreen.css';
+import Map from '../Map';
 import StatBox from '../StatBox/StatBox';
 import Controls from '../Controls/Controls';
 import LogBox from '../LogBox/LogBox';
 import Inventory from '../Inventory/Inventory';
-import MapComponent from '../MapComponent/MapComponent';
 import Store from '../Store/Store';
 import Debug from '../Debug/Debug';
+import useActions  from '../GameUtils/useActions'
+import useMovement from '../GameUtils/useMovement';
+import Grid from '../Grid/Grid';
+import './GameScreen.css';
 
 export default function GameScreen() {
     const [player, setPlayer] = useState(new Player("Ally", 150, 10, "Teleport Strike"));
@@ -27,127 +29,64 @@ export default function GameScreen() {
         new Armor("Shield", (target) => { target.hp += 20; }, 20, 50)
     ];
 
+    const handleMove = useMovement(inBattle, playerPosition, map, setPlayerPosition, setInBattle, setEnemy, player, setInventory, setLog, setStoreOpen);
+    const handleAction = useActions(player, enemy, inventory, inBattle, setInBattle, setLog, setInventory, map, setEnemy);
+
     const updateLog = (message) => {
         setLog(prevLog => [...prevLog, message]);
     };
 
     useEffect(() => {
-
         const potion = new Item("Potion", (target) => {
             target.hp += 50;
         }, true);
 
-        map.placeEnemy(new Enemy("Matt", 100, 5, "Fire"), 4, 4);
-        map.placeItem(potion, 2, 1);
-        map.placeItem(potion, 4, 2);
+        const npc = new NPC("Porter");
+
+        map.placeEnemy(new Enemy("Matt", 100, 5, "Fire"), randomInt(0, map.width), randomInt(0, map.height));
+        map.placeItem(potion, randomInt(0, map.width), randomInt(0, map.height));
+        map.placeItem(potion, randomInt(0, map.width), randomInt(0, map.height));
         map.placeItem("store", 3, 3); // Add store tile
+        map.placeNPC(npc, randomInt(0, map.width), randomInt(0, map.height));
 
         updateLog("Game started!");
     }, [map]);
 
-    const handleMove = (dx, dy) => {
-        if (inBattle) {
-            updateLog("You can't move during a battle!");
-            return;
-        }
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (storeOpen || inBattle) return;
 
-        const newX = playerPosition.x + dx;
-        const newY = playerPosition.y + dy;
-        if (map.isValidPosition(newX, newY)) {
-            setPlayerPosition({ x: newX, y: newY });
-            const itemOrEnemy = map.getItem(newX, newY);
-            if (itemOrEnemy) {
-                if (itemOrEnemy instanceof Item) {
-                    updateLog(player.addItem(itemOrEnemy));
-                    setInventory([...player.inventory]); // Ensure state update with new array
-                    map.removeItem(newX, newY);
-                } else if (itemOrEnemy instanceof Enemy) {
-                    updateLog("You encountered an enemy!");
-                    setEnemy(itemOrEnemy);
-                    setInBattle(true); // Start battle
-                } else if (itemOrEnemy === "store") {
-                    updateLog("You found a store!");
-                    setStoreOpen(true); // Open store
-                }
-            }
-        }
-    };
-
-    const handleAction = (actionType) => {
-        if (!inBattle) {
-            switch (actionType) {
-                case 'attack':
-                    updateLog("No enemy to attack!");
+            switch (event.key) {
+                case 'ArrowUp':
+                case 'w':
+                    handleMove(0, -1);
                     break;
-                case 'special':
-                    updateLog("No enemy to use special on!");
+                case 'ArrowDown':
+                case 's':
+                    handleMove(0, 1);
                     break;
-                case 'usePotion':
-                    if (!inventory.some(item => item.name === "Potion")) {
-                        updateLog("No potions in inventory.");
-                    } else {
-                        updateLog(player.useItem("Potion", player));
-                        setInventory([...player.inventory]); // Ensure state update with new array
-                    }
+                case 'ArrowLeft':
+                case 'a':
+                    handleMove(-1, 0);
+                    break;
+                case 'ArrowRight':
+                case 'd':
+                    handleMove(1, 0);
                     break;
                 default:
                     break;
             }
-            return;
-        }
+        };
 
-        switch (actionType) {
-            case 'attack':
-                updateLog(player.attack(enemy));
-                if (enemy.hp <= 0) {
-                    updateLog(player.completeQuest("Defeat Matt"));
-                    setInBattle(false); // End battle
-                    removeEnemyFromMap(enemy); // Remove enemy from map
-                    setEnemy(null);
-                } else {
-                    updateLog(enemy.attack(player));
-                    if (player.hp <= 0) {
-                        updateLog("You have been defeated!");
-                        setInBattle(false); // End battle
-                        // Handle player defeat (e.g., reset game or respawn)
-                    }
-                }
-                break;
-            case 'special':
-                updateLog(player.useSpecial(enemy));
-                if (enemy.hp <= 0) {
-                    updateLog(player.completeQuest("Defeat Matt"));
-                    setInBattle(false); // End battle
-                    removeEnemyFromMap(enemy); // Remove enemy from map
-                    setEnemy(null);
-                } else {
-                    updateLog(enemy.attack(player));
-                    if (player.hp <= 0) {
-                        updateLog("You have been defeated!");
-                        setInBattle(false); // End battle
-                        // Handle player defeat (e.g., reset game or respawn)
-                    }
-                }
-                break;
-            case 'usePotion':
-                if (!inventory.some(item => item.name === "Potion")) {
-                    updateLog("No potions in inventory.");
-                } else {
-                    updateLog(player.useItem("Potion", player));
-                    setInventory([...player.inventory]); // Ensure state update with new array
-                }
-                break;
-            default:
-                break;
-        }
-    };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [handleMove, storeOpen, inBattle]);
 
-    const removeEnemyFromMap = (enemy) => {
-        const enemyPosition = map.findItemPosition(enemy);
-        if (enemyPosition) {
-            map.removeItem(enemyPosition.x, enemyPosition.y);
-        }
-    };
+    function randomInt(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+    }
 
     const handleBuyItem = (item) => {
         if (player.gold >= item.price) {
@@ -168,32 +107,6 @@ export default function GameScreen() {
     const addGold = () => {
         player.gold += 100;
         updateLog("Added 100 gold.");
-    };
-
-    const renderGrid = () => {
-        const rows = [];
-        for (let y = 0; y < map.height; y++) {
-            const cells = [];
-            for (let x = 0; x < map.width; x++) {
-                if (x === playerPosition.x && y === playerPosition.y) {
-                    cells.push(<td key={`${x},${y}`} className="player">P</td>);
-                } else if (map.grid[y][x] instanceof Weapon) {
-                    cells.push(<td key={`${x},${y}`} className="weapon">W</td>);
-                } else if (map.grid[y][x] instanceof Armor) {
-                    cells.push(<td key={`${x},${y}`} className="armor">A</td>);
-                } else if (map.grid[y][x] instanceof Item) {
-                    cells.push(<td key={`${x},${y}`} className="item">I</td>);
-                } else if (map.grid[y][x] instanceof Enemy) {
-                    cells.push(<td key={`${x},${y}`} className="enemy">E</td>);
-                } else if (map.grid[y][x] === "store") {
-                    cells.push(<td key={`${x},${y}`} className="store">S</td>);
-                } else {
-                    cells.push(<td key={`${x},${y}`} className="plainTile"></td>);
-                }
-            }
-            rows.push(<tr key={y}>{cells}</tr>);
-        }
-        return rows;
     };
 
     return (
@@ -217,7 +130,7 @@ export default function GameScreen() {
                     />
                 )}
                 <div>
-                    <MapComponent renderGrid={renderGrid} playerPosition={playerPosition} />
+                    <Grid map={map} playerPosition={playerPosition} />
                     <Inventory player={player} inventory={inventory} />
                 </div> 
                 <LogBox log={log} />
