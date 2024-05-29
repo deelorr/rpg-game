@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useCallback } from 'react';
+import { useContext, useEffect, useCallback } from 'react';
 import { Enemy, NPC } from '../Character';
 import { Item, Weapon, Armor } from '../Item';
 import PlayerContext from '../../contexts/PlayerContext';
@@ -16,11 +16,9 @@ import Grid from '../Grid/Grid';
 import './GameScreen.css';
 
 export default function GameScreen() {
-    const { player, setPlayer } = useContext(PlayerContext); 
+    const { player, enemy, setEnemy, playerPosition, setPlayerPosition } = useContext(PlayerContext);
     const { inventory, setInventory } = useContext(InventoryContext);
-    const { map, setMap, log, setLog, inBattle, setInBattle, storeOpen, setStoreOpen } = useContext(GameContext);   
-    const [enemy, setEnemy] = useState(null);
-    const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
+    const { map, log, setLog, inBattle, setInBattle, storeOpen, setStoreOpen } = useContext(GameContext);
 
     const storeItems = [
         new Item("Potion", (target) => { target.hp += 50; }, true, 10),
