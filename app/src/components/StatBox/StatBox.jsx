@@ -4,25 +4,24 @@ import PropTypes from 'prop-types'
 
 const StatBox = ({ player, enemy, inBattle }) => {
   return (
-      <div className="statBox">
-        <div className='stats'>
-        <h2>Player Stats</h2>
-          <p>Name: {player.name}</p>
-          <p>HP: {player.hp}</p>
-          <p>Damage: {player.dmg}</p>
-          <p>Special: {player.special}</p>
-          <p>Gold: {player.gold}</p>
+    <>
+      <div className='stats'>
+        <h2>Stats</h2>
+          <span><h3>HP:</h3><p>{player.hp}</p></span>
+          <span><h3>Damage:</h3><p>{player.dmg}</p></span>
+          <span><h3>Special:</h3><p>{player.special}</p></span>
+          <span><h3>Gold:</h3><p>{player.gold}</p></span>
         </div>
-          {inBattle && enemy && (
-            <div className='enemyStats'>
-                <h2>Enemy Stats</h2>
-                <p>Name: {enemy.name}</p>
-                <p>HP: {enemy.hp}</p>
-                <p>Damage: {enemy.dmg}</p>
-                <p>Weakness: {enemy.weakness}</p>
-            </div>
-          )}
-      </div>
+        {inBattle && enemy && (
+        <div className='enemyStats'>
+          <h2>Enemy Stats</h2>
+            <span><h3>Name:</h3><p>{enemy.name}</p></span>
+            <span><h3>HP:</h3><p>{enemy.hp}</p></span>
+            <span><h3>Damage:</h3><p>{enemy.dmg}</p></span>
+            <span><h3>Weakness:</h3><p>{enemy.weakness}</p></span>
+        </div>
+        )}
+    </>
   );
 };
 

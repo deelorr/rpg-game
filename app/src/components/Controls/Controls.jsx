@@ -1,23 +1,21 @@
 import PropTypes from 'prop-types';
 import './Controls.css';
 
-const Controls = ({handleMove, handleAction}) => {
+const Controls = ({/*handleMove,*/ handleAction}) => {
     
   return (
     <>
-        <div className='controlBox'>
+        <div className='buttons'>
         <h2>Controls</h2>
-        <div className='controls'>
+        {/* <div className='controls'>
             <button onClick={() => handleMove(-1, 0)}>Move Left</button>
             <button onClick={() => handleMove(1, 0)}>Move Right</button>
             <button onClick={() => handleMove(0, -1)}>Move Up</button>
             <button onClick={() => handleMove(0, 1)}>Move Down</button>
-        </div>
-        <div className='buttons'>
+        </div> */}
             <button onClick={() => handleAction('attack')}>Attack</button>
             <button onClick={() => handleAction('special')}>Use Special</button>
             <button onClick={() => handleAction('usePotion')}>Use Potion</button>
-        </div>
         </div>
     </>
   )

@@ -1,26 +1,28 @@
-.mapBox {
+.map {
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
     margin: 10px;
-    padding: 10px;
-    border: #000 solid 1px;
+    border: rgba(0, 3, 153, 0.808) 3px outset;
     border-radius: 5px;
+    max-height: 515px;
 }
 
 table {
     border-collapse: collapse;
     margin: 10px;
+    padding: 5px;
+    background-color: rgb(226, 212, 194);
+
 }
 
 td {
     width: 35px;
     height: 30px;
     text-align: center;
-    border: 3px solid white;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
-
 
 .player {
     background-color: yellow;
@@ -43,9 +45,13 @@ td {
 }
 
 .plainTile {
-    background-color: tan;
+    background-color: rgb(172, 155, 133);
 }
 
 .store {
     background-color: silver
+}
+
+.npc {
+    background-color: rgb(255, 255, 255);
 }

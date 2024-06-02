@@ -1,26 +1,35 @@
-.statBox {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 5px;
-    border-radius: 5px;
-    height: 250px;
-}
-
 .stats {
     display: flex;
     flex-direction: column;
-    border: 1px solid #000;
+    align-items: center;
+    border: rgba(0, 3, 153, 0.808) 3px outset;
     border-radius: 5px;
     padding: 5px;
-    margin: 5px;
+    margin: 2px;
+    background-color: rgb(226, 212, 194);
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+.stats span {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .enemyStats {
     display: flex;
     flex-direction: column;
-    border: 1px solid #000;
+    align-items: center;
+    border: rgba(0, 3, 153, 0.808) 3px outset;
     border-radius: 5px;
     padding: 5px;
-    margin: 5px;
+    margin: 2px;
+    background-color: rgb(226, 212, 194);
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+.enemyStats span {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }

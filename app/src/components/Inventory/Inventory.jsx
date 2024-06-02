@@ -30,21 +30,29 @@ const Inventory = ({ player, inventory }) => {
     }
 
     return (
-        <div className='inventoryBox'>
+        <>
             <div className='inventory'>
                 <h2>Inventory:</h2>
-                {filteredInventory.map(({ item, count }, index) => (
-                    <p key={index}>
-                        {item.name}{count > 1 ? ` x${count}` : ''}
-                    </p>
-                ))}
-            </div>
-            <div className='equippedBox'>
+                {filteredInventory.length === 0 ? (
+                    <div className='invBox'>
+                    <p>Empty</p>
+                    </div>
+                ) : (
+                    <div className='invBox'>
+                        {filteredInventory.map(({ item, count }, index) => (
+                            <p key={index}>
+                                {item.name}{count > 1 ? ` x${count}` : ''}
+                            </p>
+                        ))}
+                    </div>
+                )}
                 <h2>Equipped:</h2>
-                <p>Weapon: {player.equippedWeapon?.name || "None"}</p>
-                <p>Armor: {player.equippedArmor?.name || "None"}</p>
+                <div className='equippedBox'>
+                    <span><p>Weapon: {player.equippedWeapon?.name || "None"}</p></span>
+                    <span><p>Armor: {player.equippedArmor?.name || "None"}</p></span>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

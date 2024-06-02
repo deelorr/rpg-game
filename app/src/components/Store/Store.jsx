@@ -7,7 +7,7 @@ const Store = ({ items, buyItem, closeStore }) => {
             <h2>Store</h2>
                 {items.map((item, index) => (
                     <ul key={index}>
-                        {item.name} - {item.price} gold
+                        {item.name} - {item.price} gold - {item.quantity} in stock
                         <button onClick={() => buyItem(item)}>Buy</button>
                     </ul>
                 ))}

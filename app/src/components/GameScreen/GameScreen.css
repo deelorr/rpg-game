@@ -1,15 +1,39 @@
 .gameScreen {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    border: #000 solid 1px;
+    justify-content: space-evenly;
     border-radius: 5px;
-    margin: 10px;
-    padding: 10px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    background-color: rgb(172, 155, 133);
+    border: rgba(0, 3, 153, 0.808) 3px outset;
+    height: 100vh;
+    width: 100vw;
+    margin: auto;
+
 }
 
-.defaultDiv {
+.firstDiv {
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
+    margin: 10px;
+}
+
+
+.middleDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.middleDiv h2 {
+    text-align: center;
+    font-size: 2em;
+    margin: 5px;
+}
+
+.thirdDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
