@@ -1,4 +1,4 @@
-import { Weapon, Armor, Item } from './Item';
+import { Weapon, Armor } from './Item';
 
 class Character {
     constructor(name, hp, dmg) {
@@ -8,19 +8,27 @@ class Character {
         this.level = 1;
         this.xp = 0;
         this.inventory = [];
-        this.equippedWeapon = null;
-        this.equippedArmor = null;
+        this.equippedWeapon = {};
+        this.equippedArmor = {};
+    }
+
+    equipWeapon(weapon) {
+        this.dmg += weapon.weaponDmg;
+        this.equippedWeapon = weapon;
+        return `${this.equippedWeapon.name} equipped! Damage increased to ${this.dmg}.`;
+    }
+
+    equipArmor(armor) {
+        this.hp += armor.armor;
+        this.equippedArmor = armor;
+        return `${this.equippedArmor.name} equipped! HP increased to ${this.hp}.`;
     }
 
     addItem(item) {
         if (item instanceof Weapon) {
-            this.dmg += item.weaponDmg;
-            this.equippedWeapon = item;
-            return `${this.equippedWeapon.name} equipped! Damage increased to ${this.dmg}.`;
+            return this.equipWeapon(item);
         } else if (item instanceof Armor) {
-            this.hp += item.armor;
-            this.equippedArmor = item;
-            return `${this.equippedArmor.name} equipped! HP increased to ${this.hp}.`;
+            return this.equipArmor(item);
         } else {
             this.inventory.push(item);
             return `${item.name} added to inventory.`;
@@ -96,20 +104,6 @@ class Player extends Character {
             this.levelUp();
         }
         return `${this.name} gains ${amount} xp.`;
-    }
-
-    equip(item) {
-        if (item instanceof Weapon) {
-            this.dmg += item.weaponDmg;
-            this.equippedWeapon = item;
-            return `Equipped ${item.name}. Damage increased to ${this.dmg}.`;
-        } else if (item instanceof Armor) {
-            this.hp += item.armor;
-            this.equippedArmor = item;
-            return `Equipped ${item.name}. HP increased to ${this.hp}.`;
-        } else {
-            return `Cannot equip ${item.name}.`;
-        }
     }
 
     useSpecial(target) {

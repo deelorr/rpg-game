@@ -1,10 +1,10 @@
 class Item {
-    constructor(name, useEffect, isConsumable, price, stock) {
+    constructor(name, useEffect, isConsumable, price, quantity = 1) {
         this.name = name;
         this.useEffect = useEffect;  // The function to execute on use
         this.isConsumable = isConsumable;
         this.price = price;
-        this.stock = stock;
+        this.quantity = quantity;
     }
 
     use(target) {
@@ -14,20 +14,30 @@ class Item {
             throw new Error(`No effect available for ${this.name}`);
         }
     }
+
+    reduceStock(amount) {
+        if (this.stock >= amount) {
+            this.stock -= amount;
+            return `${amount} of ${this.name} used. ${this.stock} remaining.`;
+        } else {
+            throw new Error(`Insufficient stock of ${this.name}`);
+        }
+    }
 }
 
 class Weapon extends Item {
-    constructor(name, useEffect, weaponDmg, price, stock) {
-        super(name, useEffect, false, price, stock);
+    constructor(name, useEffect, weaponDmg, price, quantity = 1) {
+        super(name, useEffect, false, price, quantity);
         this.weaponDmg = weaponDmg;
     }
 }
 
 class Armor extends Item {
-    constructor(name, useEffect, armor, price, stock) {
-        super(name, useEffect, false, price, stock);
+    constructor(name, useEffect, armor, price, quantity = 1) {
+        super(name, useEffect, false, price, quantity);
         this.armor = armor;
     }
 }
 
 export { Item, Weapon, Armor };
+

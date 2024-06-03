@@ -1,6 +1,6 @@
 import { useContext, useEffect, useCallback } from 'react';
-import { Enemy, NPC } from '../Character';
-import { Item, Weapon, Armor } from '../Item';
+import { Enemy, NPC } from '../../classes/Character';
+import { Item } from '../../classes/Item';
 import PlayerContext from '../../contexts/PlayerContext';
 import InventoryContext from '../../contexts/InventoryContext';
 import GameContext from '../../contexts/GameContext';
@@ -17,14 +17,10 @@ import './GameScreen.css';
 
 export default function GameScreen() {
     const { player, enemy, setEnemy, playerPosition, setPlayerPosition } = useContext(PlayerContext);
-    const { inventory, setInventory, storeInventory, setStoreInventory } = useContext(InventoryContext);
+    const { inventory, setInventory, storeInventory } = useContext(InventoryContext);
     const { map, log, setLog, inBattle, setInBattle, storeOpen, setStoreOpen } = useContext(GameContext);
-    // const storeItems = [
-    //     new Item("Potion", (target) => { target.hp += 50; }, true, 10),
-    //     new Weapon("Sword", (target) => { target.hp -= 15; }, 15, 50),
-    //     new Armor("Shield", (target) => { target.hp += 20; }, 20, 50)
-    // ];
-    const storeItems = storeInventory[0];
+
+    const storeItems = storeInventory;
 
     const handleMove = useMovement(inBattle, playerPosition, map, setPlayerPosition, setInBattle, setEnemy, player, setInventory, setLog, setStoreOpen);
     const handleAction = useActions(player, enemy, inventory, inBattle, setInBattle, setLog, setInventory, map, setEnemy);
@@ -37,7 +33,7 @@ export default function GameScreen() {
         const initializeGame = () => {
             const potion = new Item("Potion", (target) => {
                 target.hp += 50;
-            }, true);
+            }, true, 10, 1);
             const npc = new NPC("Porter");
 
             map.placeEnemy(new Enemy("Matt", 100, 5, "Fire"), randomInt(0, map.width), randomInt(0, map.height));
@@ -120,16 +116,10 @@ export default function GameScreen() {
                 {storeOpen && (
                     <div className='firstDiv'>
                         <StatBox player={player} enemy={enemy} inBattle={inBattle} />
-                        <Store items={storeItems} buyItem={handleBuyItem} closeStore={closeStore} />                
+                        <Store items={storeItems} buyItem={handleBuyItem} closeStore={closeStore} />
                         <Inventory player={player} inventory={inventory} />
                     </div>
                 )}
-                {/* {inBattle && ( 
-                    <div className='battleDiv'>
-                        <StatBox player={player} enemy={enemy} inBattle={inBattle} />
-                        <Controls playerPosition={playerPosition} handleMove={handleMove} handleAction={handleAction} />
-                    </div>
-                )} */}
                 <div className='middleDiv'>
                     <Grid map={map} playerPosition={playerPosition} />
                 </div>
@@ -137,7 +127,7 @@ export default function GameScreen() {
                     <LogBox log={log} />
                 </div>
             </div>
-                <Debug player={player} playerPosition={playerPosition} addGold={addGold} />
+            <Debug player={player} playerPosition={playerPosition} addGold={addGold} />
         </>
     );
 }

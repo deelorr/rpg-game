@@ -1,6 +1,22 @@
 import { updateLog, removeEnemyFromMap } from './GameUtils';
 
 const useActions = (player, enemy, inventory, inBattle, setInBattle, setLog, setInventory, map, setEnemy) => {
+    const handleBattleAction = (action) => {
+        updateLog(action, setLog);
+        if (enemy.hp <= 0) {
+            updateLog(player.completeQuest("Defeat Matt"), setLog);
+            setInBattle(false);
+            removeEnemyFromMap(enemy, map);
+            setEnemy(null);
+        } else {
+            updateLog(enemy.attack(player), setLog);
+            if (player.hp <= 0) {
+                updateLog("You have been defeated!", setLog);
+                setInBattle(false);
+            }
+        }
+    };
+
     const handleAction = (actionType) => {
         if (!inBattle) {
             switch (actionType) {
@@ -26,34 +42,10 @@ const useActions = (player, enemy, inventory, inBattle, setInBattle, setLog, set
 
         switch (actionType) {
             case 'attack':
-                updateLog(player.attack(enemy), setLog);
-                if (enemy.hp <= 0) {
-                    updateLog(player.completeQuest("Defeat Matt"), setLog);
-                    setInBattle(false);
-                    removeEnemyFromMap(enemy, map);
-                    setEnemy(null);
-                } else {
-                    updateLog(enemy.attack(player), setLog);
-                    if (player.hp <= 0) {
-                        updateLog("You have been defeated!", setLog);
-                        setInBattle(false);
-                    }
-                }
+                handleBattleAction(player.attack(enemy));
                 break;
             case 'special':
-                updateLog(player.useSpecial(enemy), setLog);
-                if (enemy.hp <= 0) {
-                    updateLog(player.completeQuest("Defeat Matt"), setLog);
-                    setInBattle(false);
-                    removeEnemyFromMap(enemy, map);
-                    setEnemy(null);
-                } else {
-                    updateLog(enemy.attack(player), setLog);
-                    if (player.hp <= 0) {
-                        updateLog("You have been defeated!", setLog);
-                        setInBattle(false);
-                    }
-                }
+                handleBattleAction(player.useSpecial(enemy));
                 break;
             case 'usePotion':
                 if (!inventory.some(item => item.name === "Potion")) {

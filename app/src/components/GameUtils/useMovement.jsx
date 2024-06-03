@@ -1,9 +1,21 @@
 import { useCallback } from 'react';
-import { Enemy, NPC } from '../Character'
-import { Item } from '../Item';
+import { Enemy, NPC } from '../../classes/Character';
+import { Item } from '../../classes/Item';
 import { updateLog } from '../GameUtils/GameUtils';
 
 const useMovement = (inBattle, playerPosition, map, setPlayerPosition, setInBattle, setEnemy, player, setInventory, setLog, setStoreOpen) => {
+    const handleItemEncounter = (item, x, y) => {
+        updateLog(player.addItem(item), setLog);
+        setInventory([...player.inventory]);
+        map.removeItem(x, y);
+    };
+
+    const handleEnemyEncounter = (enemy) => {
+        updateLog("You encountered an enemy!", setLog);
+        setEnemy(enemy);
+        setInBattle(true);
+    };
+
     const handleMove = useCallback((dx, dy) => {
         if (inBattle) {
             updateLog("You can't move during a battle!", setLog);
@@ -17,13 +29,9 @@ const useMovement = (inBattle, playerPosition, map, setPlayerPosition, setInBatt
             const itemOrEnemy = map.getItem(newX, newY);
             if (itemOrEnemy) {
                 if (itemOrEnemy instanceof Item) {
-                    updateLog(player.addItem(itemOrEnemy), setLog);
-                    setInventory([...player.inventory]);
-                    map.removeItem(newX, newY);
+                    handleItemEncounter(itemOrEnemy, newX, newY);
                 } else if (itemOrEnemy instanceof Enemy) {
-                    updateLog("You encountered an enemy!", setLog);
-                    setEnemy(itemOrEnemy);
-                    setInBattle(true);
+                    handleEnemyEncounter(itemOrEnemy);
                 } else if (itemOrEnemy === "store") {
                     updateLog("You found a store!", setLog);
                     setStoreOpen(true);
@@ -32,7 +40,7 @@ const useMovement = (inBattle, playerPosition, map, setPlayerPosition, setInBatt
                 }
             }
         }
-    }, [inBattle, map, player, playerPosition, setInventory, setInBattle, setEnemy, setPlayerPosition, setStoreOpen, setLog]);
+    }, [inBattle, playerPosition, map, player, setInventory, setInBattle, setEnemy, setPlayerPosition, setStoreOpen, setLog]);
 
     return handleMove;
 };

@@ -1,4 +1,4 @@
-// gameUtils.js
+// GameUtils.js
 
 export const updateLog = (message, setLog) => {
     setLog(prevLog => [...prevLog, message]);
