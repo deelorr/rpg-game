@@ -8,7 +8,6 @@ const Controls = ({ handleAction }) => {
       <div className='buttons'>
         <button className='attackBtn' onClick={() => handleAction('attack')}>Attack</button>
         <button className='specialBtn' onClick={() => handleAction('special')}>Use Special</button>
-        <button className='usePotionBtn' onClick={() => handleAction('usePotion')}>Use Potion</button>
       </div>
     </div>
   );

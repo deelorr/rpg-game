@@ -15,7 +15,7 @@ const groupInventoryItems = (inventory) => {
     return Object.values(itemMap);
 };
 
-const Inventory = ({ player, inventory }) => {
+const Inventory = ({ player, inventory, handleAction }) => {
     const groupedInventory = useMemo(() => groupInventoryItems(inventory), [inventory]);
 
     const filteredInventory = groupedInventory.filter(({ item }) => !(item instanceof Weapon) && !(item instanceof Armor));
@@ -40,6 +40,7 @@ const Inventory = ({ player, inventory }) => {
                         {item.name}{count > 1 ? ` x${count}` : ''}
                     </p>
                 ))}
+                <button className='usePotion' onClick={() => handleAction('usePotion')}>Use</button>
             </div>
             )}
             </div>
@@ -90,6 +91,7 @@ Inventory.propTypes = {
         price: PropTypes.number,
         stock: PropTypes.number,
     })).isRequired,
+    handleAction: PropTypes.func.isRequired,
 };
 
 export default Inventory;

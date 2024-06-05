@@ -124,14 +124,14 @@ export default function GameScreen() {
                     <div className='firstDiv'>
                         <StatBox player={player} enemy={enemy} inBattle={inBattle} />
                         <Controls playerPosition={playerPosition} handleMove={handleMove} handleAction={handleAction} />
-                        <Inventory player={player} inventory={inventory} />
+                        <Inventory player={player} inventory={inventory} handleAction={handleAction} />
                     </div>
                 )}
                 {storeOpen && (
                     <div className='firstDiv'>
                         <StatBox player={player} enemy={enemy} inBattle={inBattle} />
                         <Store storeItems={storeItems} handleBuyItem={handleBuyItem} closeStore={closeStore} />
-                        <Inventory player={player} inventory={inventory} />
+                        <Inventory player={player} inventory={inventory} handleAction={handleAction}/>
                     </div>
                 )}
                 <div className='middleDiv'>
