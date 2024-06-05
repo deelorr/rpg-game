@@ -17,7 +17,7 @@ import './GameScreen.css';
 
 export default function GameScreen() {
     const { player, enemy, setEnemy, playerPosition, setPlayerPosition } = useContext(PlayerContext);
-    const { inventory, setInventory, storeInventory } = useContext(InventoryContext);
+    const { inventory, setInventory, storeInventory, setStoreInventory } = useContext(InventoryContext);
     const { map, log, setLog, inBattle, setInBattle, storeOpen, setStoreOpen } = useContext(GameContext);
 
     const storeItems = storeInventory;
@@ -88,6 +88,20 @@ export default function GameScreen() {
             updateLog(`Bought ${item.name} for ${item.price} gold.`);
             player.addItem(item);
             setInventory([...player.inventory]);
+            
+            setStoreInventory((prevStoreInventory) => {
+                const itemIndex = prevStoreInventory.findIndex((storeItem) => storeItem.name === item.name);
+                if (itemIndex !== -1) { // logic for updating quantity of item in store
+                    const updatedStoreInventory = [...prevStoreInventory];
+                    if (updatedStoreInventory[itemIndex].quantity > 1) {
+                        updatedStoreInventory[itemIndex].quantity -= 1;
+                    } else {
+                        updatedStoreInventory.splice(itemIndex, 1);
+                    }
+                    return updatedStoreInventory;
+                }
+                return prevStoreInventory;
+            });
         } else {
             updateLog("Not enough gold.");
         }
@@ -116,7 +130,7 @@ export default function GameScreen() {
                 {storeOpen && (
                     <div className='firstDiv'>
                         <StatBox player={player} enemy={enemy} inBattle={inBattle} />
-                        <Store items={storeItems} buyItem={handleBuyItem} closeStore={closeStore} />
+                        <Store storeItems={storeItems} handleBuyItem={handleBuyItem} closeStore={closeStore} />
                         <Inventory player={player} inventory={inventory} />
                     </div>
                 )}
