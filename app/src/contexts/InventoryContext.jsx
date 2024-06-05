@@ -9,7 +9,6 @@ const initialStoreInventory = [
     new Item("Potion", (target) => { target.hp += 50; }, true, 10, 2),
     new Weapon("Sword", null, 15, 50, 1),
     new Armor("Shield", null, 20, 50, 1),
-    new Item("Mana Potion", (target) => { target.mp += 50; }, true, 10, 2)
 ];
 
 const InventoryProvider = ({ children }) => {

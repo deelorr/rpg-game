@@ -5,14 +5,19 @@ const Store = ({ storeItems, handleBuyItem, closeStore }) => {
     return (
         <div className="storeBox">
             <h2>Store</h2>
-            {storeItems.length === 0 && <p>SOLD OUT!</p>}
+            <div className="storeItems">
+                {storeItems.length === 0 && <p className="soldOut">SOLD OUT!</p>}
                 {storeItems.map((item, index) => (
                     <li key={index}>
-                        {item.name} - {item.price} gold - {item.quantity || 0} in stock
+                        <div className="itemInfo">
+                            <div className="itemNamePrice">{item.name}: {item.price} Coin</div>
+                            <div className="itemStock">Stock: {item.quantity || 0}</div>
+                        </div>
                         <button onClick={() => handleBuyItem(item)}>Buy</button>
                     </li>
                 ))}
-            <button onClick={closeStore}>Close Store</button>
+            </div>
+            <button className="closeButton" onClick={closeStore}>Close Store</button>
         </div>
     );
 };

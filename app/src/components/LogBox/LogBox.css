@@ -1,13 +1,12 @@
+/* LogBox.css */
 .logContainer {
-  height: 70vh;
-  max-height: 515px;
-  width: 275px;
+  height: 80%;
   color: #001f3f;
   border: 3px outset rgba(0, 3, 153, 0.808);
-  border-radius: 5px;
+  border-radius: 10px;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-  margin: 10px;
   padding: 5px;
+  margin: 2px;
   background-color: rgb(226, 212, 194);
   overflow: hidden;
 }
@@ -19,8 +18,6 @@
   flex-direction: column-reverse;
   border-radius: 5px;
   background-color: #f0f0f0;
-}
-
-.logContent {
-  padding: 5px;
+  padding: 10px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Weapon, Armor } from '../../classes/Item';
 import './Inventory.css';
 
@@ -25,27 +25,39 @@ const Inventory = ({ player, inventory }) => {
     }
 
     return (
+        <>
         <div className='inventory'>
-            <h2>Inventory:</h2>
+            <div className='top-inv'>
+                <h2>Inventory:</h2>
             {filteredInventory.length === 0 ? (
                 <div className='invBox'>
                     <p>Empty</p>
                 </div>
             ) : (
-                <div className='invBox'>
-                    {filteredInventory.map(({ item, count }, index) => (
-                        <p key={index}>
-                            {item.name}{count > 1 ? ` x${count}` : ''}
-                        </p>
-                    ))}
-                </div>
+            <div className='invBox'>
+                {filteredInventory.map(({ item, count }, index) => (
+                    <p key={index}>
+                        {item.name}{count > 1 ? ` x${count}` : ''}
+                    </p>
+                ))}
+            </div>
             )}
-            <h2>Equipped:</h2>
-            <div className='equippedBox'>
-                <span><p>Weapon: {player.equippedWeapon?.name || "None"}</p></span>
-                <span><p>Armor: {player.equippedArmor?.name || "None"}</p></span>
+            </div>
+            <div className='bottom-inv'>
+                <h2>Equipped:</h2>
+                <div className='equippedBox'>
+                    <div className='equippedWeapon'>
+                        <p>Weapon:</p>
+                        <span className='weaponText'>{player.equippedWeapon?.name || "None"}</span>
+                    </div>
+                    <div className='equippedArmor'>
+                        <p>Armor:</p>
+                        <span className='armorText'>{player.equippedArmor?.name || "None"}</span>
+                    </div>
+                </div>
             </div>
         </div>
+        </>
     );
 };
 

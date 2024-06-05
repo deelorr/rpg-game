@@ -1,35 +1,25 @@
-.stats {
+/* StatBox.css */
+.stats, .enemyStats {
     display: flex;
     flex-direction: column;
     align-items: center;
     border: rgba(0, 3, 153, 0.808) 3px outset;
-    border-radius: 5px;
-    padding: 5px;
-    margin: 2px;
-    background-color: rgb(226, 212, 194);
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    background-color: rgb(226, 212, 194);
+    border-radius: 10px;
+    padding: 5px;
+    height: 25%;
 }
 
-.stats span {
+.stat-item, .enemyStats .stat-item {
     display: flex;
     justify-content: space-between;
     width: 100%;
-}
-
-.enemyStats {
-    display: flex;
-    flex-direction: column;
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
     align-items: center;
-    border: rgba(0, 3, 153, 0.808) 3px outset;
-    border-radius: 5px;
-    padding: 5px;
-    margin: 2px;
-    background-color: rgb(226, 212, 194);
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-}
-
-.enemyStats span {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
+    flex-direction: row;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    margin-bottom: 5px;
 }

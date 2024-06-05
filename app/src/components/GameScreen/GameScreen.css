@@ -1,3 +1,4 @@
+/* GameScreen.css */
 .gameScreen {
     display: flex;
     flex-direction: row;
@@ -9,21 +10,26 @@
     height: 100vh;
     width: 100vw;
     margin: auto;
-
+    overflow: hidden;
 }
 
 .firstDiv {
+    width: 30%;
+}
+
+.middleDiv {
+    width: 65%;
+}
+
+.thirdDiv {
+    width: 25%;
+}
+
+.firstDiv, .middleDiv, .thirdDiv {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     margin: 10px;
-}
-
-
-.middleDiv {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
 }
 
 .middleDiv h2 {
@@ -31,9 +37,60 @@
     font-size: 2em;
     margin: 5px;
 }
+/* 
+@media (max-width: 1024px) {
+    .gameScreen {
+        flex-direction: column;
+        height: auto;
+        width: 100%;
+    }
 
-.thirdDiv {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
+    .firstDiv, .middleDiv, .thirdDiv {
+        margin: 10px 0;
+    }
+
+    .middleDiv {
+        order: 1;
+    }
+
+    .firstDiv {
+        order: 2;
+    }
+
+    .thirdDiv {
+        order: 3;
+    }
 }
+
+@media (max-width: 768px) {
+    .gameScreen {
+        height: auto;
+        padding: 10px;
+    }
+
+    .middleDiv {
+        margin: 10px 0;
+    }
+
+    .firstDiv, .thirdDiv {
+        margin: 5px 0;
+    }
+
+    .middleDiv h2 {
+        font-size: 1.5em;
+    }
+}
+
+@media (max-width: 480px) {
+    .firstDiv, .middleDiv, .thirdDiv {
+        margin: 5px 0;
+    }
+
+    .middleDiv h2 {
+        font-size: 1.2em;
+    }
+
+    .gameScreen {
+        padding: 5px;
+    }
+} */

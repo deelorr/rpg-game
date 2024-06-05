@@ -3,11 +3,13 @@ import './Controls.css';
 
 const Controls = ({ handleAction }) => {
   return (
-    <div className='buttons'>
+    <div className='controlBox'>
       <h2>Controls</h2>
-      <button onClick={() => handleAction('attack')}>Attack</button>
-      <button onClick={() => handleAction('special')}>Use Special</button>
-      <button onClick={() => handleAction('usePotion')}>Use Potion</button>
+      <div className='buttons'>
+        <button className='attackBtn' onClick={() => handleAction('attack')}>Attack</button>
+        <button className='specialBtn' onClick={() => handleAction('special')}>Use Special</button>
+        <button className='usePotionBtn' onClick={() => handleAction('usePotion')}>Use Potion</button>
+      </div>
     </div>
   );
 };

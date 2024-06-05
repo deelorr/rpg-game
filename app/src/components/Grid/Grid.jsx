@@ -30,7 +30,7 @@ const Grid = ({ map, playerPosition }) => {
     };
 
     return (
-        <div>
+        <div className='mapContainer'>
             <h2>Map</h2>
             <table className='map'>
                 <tbody>
