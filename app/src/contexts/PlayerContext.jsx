@@ -1,5 +1,5 @@
 import { createContext, useState } from 'react';
-import { Player } from '../classes/Character';
+import Player from '../classes/characters/Player'
 import PropTypes from 'prop-types';
 
 const PlayerContext = createContext();

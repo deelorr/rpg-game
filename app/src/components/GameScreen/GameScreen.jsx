@@ -1,6 +1,7 @@
-import { useContext, useEffect, useCallback } from 'react';
-import { Enemy, NPC } from '../../classes/Character';
-import { Item } from '../../classes/Item';
+import { useContext, useEffect } from 'react';
+import Enemy from '../../classes/characters/Enemy';
+import NPC from '../../classes/characters/NPC';
+import Item from '../../classes/items/Item';
 import PlayerContext from '../../contexts/PlayerContext';
 import InventoryContext from '../../contexts/InventoryContext';
 import GameContext from '../../contexts/GameContext';
@@ -13,6 +14,7 @@ import Debug from '../Debug/Debug';
 import useActions from '../GameUtils/useActions';
 import useMovement from '../GameUtils/useMovement';
 import Grid from '../Grid/Grid';
+import { randomInt, handleBuyItem, closeStore, addGold, updateLog } from '../GameUtils/GameUtils';
 import './GameScreen.css';
 
 export default function GameScreen() {
@@ -24,10 +26,6 @@ export default function GameScreen() {
 
     const handleMove = useMovement(inBattle, playerPosition, map, setPlayerPosition, setInBattle, setEnemy, player, setInventory, setLog, setStoreOpen);
     const handleAction = useActions(player, enemy, inventory, inBattle, setInBattle, setLog, setInventory, map, setEnemy);
-
-    const updateLog = useCallback((message) => {
-        setLog((prevLog) => [...prevLog, message]);
-    }, [setLog]);
 
     useEffect(() => {
         const initializeGame = () => {
@@ -41,79 +39,11 @@ export default function GameScreen() {
             map.placeObject(potion, randomInt(0, map.width), randomInt(0, map.height));
             map.placeObject("store", 3, 3);
             map.placeObject(npc, randomInt(0, map.width), randomInt(0, map.height));
-            updateLog("Game started!");
+            updateLog("Game started!", setLog);
         };
 
         initializeGame();
-    }, [map, updateLog]);
-
-    useEffect(() => {
-        const handleKeyDown = (event) => {
-            if (storeOpen || inBattle) return;
-
-            switch (event.key) {
-                case 'ArrowUp':
-                case 'w':
-                    handleMove(0, -1);
-                    break;
-                case 'ArrowDown':
-                case 's':
-                    handleMove(0, 1);
-                    break;
-                case 'ArrowLeft':
-                case 'a':
-                    handleMove(-1, 0);
-                    break;
-                case 'ArrowRight':
-                case 'd':
-                    handleMove(1, 0);
-                    break;
-                default:
-                    break;
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [handleMove, storeOpen, inBattle]);
-
-    const randomInt = (min, max) => Math.floor(Math.random() * (max - min) + min);
-
-    const handleBuyItem = (item) => {
-        if (player.gold >= item.price) {
-            player.gold -= item.price;
-            player.addItem(item);
-            updateLog(`Bought ${item.name} for ${item.price} gold.`);
-            setInventory([...player.inventory]);
-            setStoreInventory((prevStoreInventory) => {
-                const itemIndex = prevStoreInventory.findIndex((storeItem) => storeItem.name === item.name);
-                if (itemIndex !== -1) { // logic for updating quantity of item in store
-                    const updatedStoreInventory = [...prevStoreInventory];
-                    if (updatedStoreInventory[itemIndex].quantity > 1) {
-                        updatedStoreInventory[itemIndex].quantity -= 1;
-                    } else {
-                        updatedStoreInventory.splice(itemIndex, 1);
-                    }
-                    return updatedStoreInventory;
-                }
-                return prevStoreInventory;
-            });
-        } else {
-            updateLog("Not enough gold.");
-        }
-    };
-
-    const closeStore = () => {
-        setStoreOpen(false);
-        updateLog("Left the store.");
-    };
-
-    const addGold = () => {
-        player.gold += 100;
-        updateLog("Added 100 gold.");
-    };
+    }, [map, setLog]);
 
     return (
         <>
@@ -128,13 +58,13 @@ export default function GameScreen() {
                 {storeOpen && (
                     <div className='firstDiv'>
                         <StatBox player={player} enemy={enemy} inBattle={inBattle} />
-                        <Store storeItems={storeItems} handleBuyItem={handleBuyItem} closeStore={closeStore} />
+                        <Store storeItems={storeItems} handleBuyItem={(item) => handleBuyItem(item, player, updateLog, setInventory, setStoreInventory)} closeStore={() => closeStore(setStoreOpen, updateLog)} />
                         <Inventory player={player} inventory={inventory} handleAction={handleAction}/>
                     </div>
                 )}
                 <div className='middleDiv'>
                     <Grid map={map} playerPosition={playerPosition} />
-                    <Debug player={player} playerPosition={playerPosition} addGold={addGold} />
+                    <Debug player={player} playerPosition={playerPosition} addGold={() => addGold(player, updateLog)} />
                 </div>
                 <div className='thirdDiv'>
                     <LogBox log={log} />

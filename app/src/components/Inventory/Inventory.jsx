@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
-import { Weapon, Armor } from '../../classes/Item';
+import Weapon from '../../classes/items/weapons/Weapon';
+import Armor from '../../classes/items/armor/Armor';
 import './Inventory.css';
 
 const groupInventoryItems = (inventory) => {

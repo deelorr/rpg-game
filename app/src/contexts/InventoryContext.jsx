@@ -1,6 +1,8 @@
 import { createContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Item, Weapon, Armor } from '../classes/Item';
+import Item from '../classes/items/Item';
+import Weapon from '../classes/items/weapons/Weapon';
+import Armor from '../classes/items/armor/Armor';
 
 const InventoryContext = createContext();
 

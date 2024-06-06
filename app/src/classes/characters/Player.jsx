@@ -1,28 +1,9 @@
-import { Weapon, Armor } from './Item';
-
-class Character {
-    constructor(name, hp, dmg) {
-        this.name = name;
-        this.hp = hp;
-        this.dmg = dmg;
-    }
-
-    attack(target) {
-        target.takeDmg(this.dmg);
-        return `${this.name} attacks ${target.name} for ${this.dmg} damage.`;
-    }
-
-    takeDmg(amount) {
-        this.hp -= amount;
-        if (this.hp <= 0) {
-            return `${this.name} takes ${amount} damage and has been defeated.`;
-        } else {
-            return `${this.name} takes ${amount} damage. HP is now ${this.hp}.`;
-        }
-    }
-}
+import Character from './Character';
+import Weapon from '../items/weapons/Weapon';
+import Armor from '../items/armor/Armor';
 
 class Player extends Character {
+
     constructor(name, hp, dmg, special) {
         super(name, hp, dmg);
         this.special = special;
@@ -79,25 +60,4 @@ class Player extends Character {
     }
 }
 
-class Enemy extends Character {
-    constructor(name, hp, dmg, weakness) {
-        super(name, hp, dmg);
-        this.weakness = weakness;
-    }
-
-    showWeakness() {
-        return `This enemy is weak to ${this.weakness}`;
-    }
-}
-
-class NPC extends Character {
-    constructor(name, hp, dmg) {
-        super(name, hp, dmg);
-    }
-
-    talk() {
-        return `Hello, my name is ${this.name}.`;
-    }
-}
-
-export { Player, Enemy, Character, NPC };
+export default Player;

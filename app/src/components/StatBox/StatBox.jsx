@@ -1,5 +1,7 @@
 import './StatBox.css';
-import { Player, Enemy } from '../../classes/Character';
+import Player from '../../classes/characters/Player';
+import Enemy from '../../classes/characters/Enemy';
+
 import PropTypes from 'prop-types';
 
 const StatBox = ({ player, enemy, inBattle }) => {

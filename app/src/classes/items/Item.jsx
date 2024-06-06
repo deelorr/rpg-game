@@ -16,19 +16,4 @@ class Item {
     }
 }
 
-class Weapon extends Item {
-    constructor(name, useEffect, weaponDmg, price, quantity = 1) {
-        super(name, useEffect, false, price, quantity);
-        this.weaponDmg = weaponDmg;
-    }
-}
-
-class Armor extends Item {
-    constructor(name, useEffect, armor, price, quantity = 1) {
-        super(name, useEffect, false, price, quantity);
-        this.armor = armor;
-    }
-}
-
-export { Item, Weapon, Armor };
-
+export default Item;

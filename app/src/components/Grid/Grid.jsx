@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types';
-import { Weapon, Armor, Item } from '../../classes/Item'; // Adjust the import paths as needed
-import { Enemy, NPC } from '../../classes/Character'; // Adjust the import paths as needed
+import Weapon from '../../classes/items/weapons/Weapon';
+import Armor from '../../classes/items/armor/Armor';
+import Item from '../../classes/items/Item';
+import Enemy from '../../classes/characters/Enemy';
+import NPC from '../../classes/characters/NPC';
 import './Grid.css';
 
 const Grid = ({ map, playerPosition }) => {
