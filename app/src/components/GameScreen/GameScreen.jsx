@@ -57,14 +57,33 @@ export default function GameScreen() {
                 )}
                 {storeOpen && (
                     <div className='firstDiv'>
-                        <StatBox player={player} enemy={enemy} inBattle={inBattle} />
-                        <Store storeItems={storeItems} handleBuyItem={(item) => handleBuyItem(item, player, updateLog, setInventory, setStoreInventory)} closeStore={() => closeStore(setStoreOpen, updateLog)} />
-                        <Inventory player={player} inventory={inventory} handleAction={handleAction}/>
+                        <StatBox 
+                            player={player} 
+                            enemy={enemy} 
+                            inBattle={inBattle} 
+                        />
+                        <Store 
+                            storeItems={storeItems} 
+                            handleBuyItem={(item) => handleBuyItem(item, player, updateLog, setInventory, setStoreInventory, setLog)} 
+                            closeStore={() => closeStore(setStoreOpen, updateLog, setLog)} 
+                        /> 
+                        <Inventory 
+                            player={player} 
+                            inventory={inventory} 
+                            handleAction={handleAction}
+                        />
                     </div>
                 )}
                 <div className='middleDiv'>
-                    <Grid map={map} playerPosition={playerPosition} />
-                    <Debug player={player} playerPosition={playerPosition} addGold={() => addGold(player, updateLog)} />
+                    <Grid 
+                        map={map} 
+                        playerPosition={playerPosition} 
+                    />
+                    <Debug 
+                        player={player} 
+                        playerPosition={playerPosition} 
+                        addGold={() => addGold(player, updateLog, setLog)} 
+                    />
                 </div>
                 <div className='thirdDiv'>
                     <LogBox log={log} />

@@ -7,13 +7,13 @@ import { GameProvider } from './contexts/GameContext';
 const App = () => {
 
     return (
+    <GameProvider>
         <PlayerProvider>
             <InventoryProvider>
-                <GameProvider>
-                    <GameScreen />
-                </GameProvider>
+                <GameScreen />
             </InventoryProvider>
         </PlayerProvider>
+    </GameProvider>
     );
 }
 
