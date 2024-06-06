@@ -36,12 +36,11 @@ export default function GameScreen() {
             }, true, 10, 1);
             const npc = new NPC("Porter");
 
-            map.placeEnemy(new Enemy("Matt", 100, 5, "Fire"), randomInt(0, map.width), randomInt(0, map.height));
-            map.placeItem(potion, randomInt(0, map.width), randomInt(0, map.height));
-            map.placeItem(potion, randomInt(0, map.width), randomInt(0, map.height));
-            map.placeItem("store", 3, 3);
-            map.placeNPC(npc, randomInt(0, map.width), randomInt(0, map.height));
-
+            map.placeObject(new Enemy("Matt", 100, 5, "Fire"), randomInt(0, map.width), randomInt(0, map.height));
+            map.placeObject(potion, randomInt(0, map.width), randomInt(0, map.height));
+            map.placeObject(potion, randomInt(0, map.width), randomInt(0, map.height));
+            map.placeObject("store", 3, 3);
+            map.placeObject(npc, randomInt(0, map.width), randomInt(0, map.height));
             updateLog("Game started!");
         };
 
@@ -85,10 +84,9 @@ export default function GameScreen() {
     const handleBuyItem = (item) => {
         if (player.gold >= item.price) {
             player.gold -= item.price;
-            updateLog(`Bought ${item.name} for ${item.price} gold.`);
             player.addItem(item);
+            updateLog(`Bought ${item.name} for ${item.price} gold.`);
             setInventory([...player.inventory]);
-            
             setStoreInventory((prevStoreInventory) => {
                 const itemIndex = prevStoreInventory.findIndex((storeItem) => storeItem.name === item.name);
                 if (itemIndex !== -1) { // logic for updating quantity of item in store
@@ -136,12 +134,12 @@ export default function GameScreen() {
                 )}
                 <div className='middleDiv'>
                     <Grid map={map} playerPosition={playerPosition} />
+                    <Debug player={player} playerPosition={playerPosition} addGold={addGold} />
                 </div>
                 <div className='thirdDiv'>
                     <LogBox log={log} />
                 </div>
             </div>
-            <Debug player={player} playerPosition={playerPosition} addGold={addGold} />
         </>
     );
 }

@@ -4,7 +4,6 @@ const useActions = (player, enemy, inventory, inBattle, setInBattle, setLog, set
     const handleBattleAction = (action) => {
         updateLog(action, setLog);
         if (enemy.hp <= 0) {
-            updateLog(player.completeQuest("Defeat Matt"), setLog);
             setInBattle(false);
             removeEnemyFromMap(enemy, map);
             setEnemy(null);

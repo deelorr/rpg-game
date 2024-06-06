@@ -17,7 +17,6 @@ const groupInventoryItems = (inventory) => {
 
 const Inventory = ({ player, inventory, handleAction }) => {
     const groupedInventory = useMemo(() => groupInventoryItems(inventory), [inventory]);
-
     const filteredInventory = groupedInventory.filter(({ item }) => !(item instanceof Weapon) && !(item instanceof Armor));
 
     if (!player) {
@@ -67,8 +66,6 @@ Inventory.propTypes = {
         name: PropTypes.string.isRequired,
         hp: PropTypes.number.isRequired,
         dmg: PropTypes.number.isRequired,
-        level: PropTypes.number.isRequired,
-        xp: PropTypes.number.isRequired,
         inventory: PropTypes.array.isRequired,
         equippedWeapon: PropTypes.shape({
             name: PropTypes.string,
@@ -80,8 +77,6 @@ Inventory.propTypes = {
         useItem: PropTypes.func.isRequired,
         attack: PropTypes.func.isRequired,
         takeDmg: PropTypes.func.isRequired,
-        levelUp: PropTypes.func.isRequired,
-        completeQuest: PropTypes.func.isRequired,
         useSpecial: PropTypes.func.isRequired,
     }).isRequired,
     inventory: PropTypes.arrayOf(PropTypes.shape({

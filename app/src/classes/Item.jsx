@@ -14,15 +14,6 @@ class Item {
             throw new Error(`No effect available for ${this.name}`);
         }
     }
-
-    reduceStock(amount) {
-        if (this.stock >= amount) {
-            this.stock -= amount;
-            return `${amount} of ${this.name} used. ${this.stock} remaining.`;
-        } else {
-            throw new Error(`Insufficient stock of ${this.name}`);
-        }
-    }
 }
 
 class Weapon extends Item {

@@ -5,21 +5,9 @@ class Map {
         this.grid = Array.from({ length: height }, () => Array.from({ length: width }, () => null));
     }
 
-    placeItem(item, x, y) {
+    placeObject(object, x, y) {
         if (this.isValidPosition(x, y)) {
-            this.grid[y][x] = item;
-        }
-    }
-
-    placeEnemy(enemy, x, y) {
-        if (this.isValidPosition(x, y)) {
-            this.grid[y][x] = enemy;
-        }
-    }
-
-    placeNPC(npc, x, y) {
-        if (this.isValidPosition(x, y)) {
-            this.grid[y][x] = npc;
+            this.grid[y][x] = object;
         }
     }
 
