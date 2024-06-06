@@ -16,8 +16,18 @@ const PlayerProvider = ({ children }) => {
         setPlayerPosition(newPosition);
     };
 
+    const values = {
+        player,
+        setPlayer,
+        enemy,
+        setEnemy,
+        playerPosition,
+        setPlayerPosition,
+        updatePlayerPosition
+    };
+
     return (
-        <PlayerContext.Provider value={{ player, setPlayer, enemy, setEnemy, playerPosition, setPlayerPosition, updatePlayerPosition }}>
+        <PlayerContext.Provider value={ values }>
             {children}
         </PlayerContext.Provider>
     );

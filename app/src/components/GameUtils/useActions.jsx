@@ -1,4 +1,4 @@
-import { updateLog, removeEnemyFromMap } from './GameUtils';
+import { updateLog, removeEnemyFromMap } from '../GameUtils/GameUtils';
 
 const useActions = (player, enemy, inventory, inBattle, setInBattle, setLog, setInventory, map, setEnemy) => {
     const handleBattleAction = (action) => {

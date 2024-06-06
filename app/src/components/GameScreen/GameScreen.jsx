@@ -1,6 +1,5 @@
 import { useContext, useEffect } from 'react';
 import Enemy from '../../classes/characters/Enemy';
-import NPC from '../../classes/characters/NPC';
 import Item from '../../classes/items/Item';
 import PlayerContext from '../../contexts/PlayerContext';
 import InventoryContext from '../../contexts/InventoryContext';
@@ -16,6 +15,8 @@ import useMovement from '../GameUtils/useMovement';
 import Grid from '../Grid/Grid';
 import { randomInt, handleBuyItem, closeStore, addGold, updateLog } from '../GameUtils/GameUtils';
 import './GameScreen.css';
+import Porter from '../../classes/characters/npc/Porter';
+import QuestLog from '../QuestLog/QuestLog';
 
 export default function GameScreen() {
     const { player, enemy, setEnemy, playerPosition, setPlayerPosition } = useContext(PlayerContext);
@@ -32,13 +33,13 @@ export default function GameScreen() {
             const potion = new Item("Potion", (target) => {
                 target.hp += 50;
             }, true, 10, 1);
-            const npc = new NPC("Porter");
+            const porter = new Porter("Porter", "Hello! My name is Porter.");
 
             map.placeObject(new Enemy("Matt", 100, 5, "Fire"), randomInt(0, map.width), randomInt(0, map.height));
             map.placeObject(potion, randomInt(0, map.width), randomInt(0, map.height));
             map.placeObject(potion, randomInt(0, map.width), randomInt(0, map.height));
             map.placeObject("store", 3, 3);
-            map.placeObject(npc, randomInt(0, map.width), randomInt(0, map.height));
+            map.placeObject(porter, randomInt(0, map.width), randomInt(0, map.height));
             updateLog("Game started!", setLog);
         };
 
@@ -87,6 +88,7 @@ export default function GameScreen() {
                 </div>
                 <div className='thirdDiv'>
                     <LogBox log={log} />
+                    <QuestLog />
                 </div>
             </div>
         </>

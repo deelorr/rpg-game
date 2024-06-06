@@ -25,8 +25,17 @@ const InventoryProvider = ({ children }) => {
         setInventory((prevInventory) => prevInventory.filter(item => item.name !== itemName));
     };
 
+    const values = {
+        inventory,
+        setInventory,
+        storeInventory,
+        setStoreInventory,
+        addItemToInventory,
+        removeItemFromInventory
+    };
+
     return (
-        <InventoryContext.Provider value={{ inventory, setInventory, storeInventory, setStoreInventory, addItemToInventory, removeItemFromInventory }}>
+        <InventoryContext.Provider value={ values }>
             {children}
         </InventoryContext.Provider>
     );

@@ -3,7 +3,8 @@ import Weapon from '../../classes/items/weapons/Weapon';
 import Armor from '../../classes/items/armor/Armor';
 import Item from '../../classes/items/Item';
 import Enemy from '../../classes/characters/Enemy';
-import NPC from '../../classes/characters/NPC';
+import NPC from '../../classes/characters/npc/NPC';
+import Porter from '../../classes/characters/npc/Porter';
 import './Grid.css';
 
 const Grid = ({ map, playerPosition }) => {
@@ -15,6 +16,7 @@ const Grid = ({ map, playerPosition }) => {
         if (item instanceof Item) return 'item';
         if (item instanceof Enemy) return 'enemy';
         if (item instanceof NPC) return 'npc';
+        if (item instanceof Porter) return 'porter';
         if (item === 'store') return 'store';
         return 'plainTile';
     };

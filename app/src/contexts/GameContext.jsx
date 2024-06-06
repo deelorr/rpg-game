@@ -21,15 +21,30 @@ export const GameProvider = ({ children }) => {
         new Armor("Shield", null, 20, 50, 1)
     ]);
 
-    GameProvider.propTypes = {
-        children: PropTypes.node.isRequired,
+    const values = {
+        map,
+        setMap,
+        log,
+        setLog,
+        inBattle,
+        setInBattle,
+        storeOpen,
+        setStoreOpen,
+        enemy,
+        setEnemy,
+        storeInventory,
+        setStoreInventory
     };
 
     return (
-        <GameContext.Provider value={{ map, setMap, log, setLog, inBattle, setInBattle, storeOpen, setStoreOpen, enemy, setEnemy, storeInventory, setStoreInventory }}>
+        <GameContext.Provider value={values}>
             {children}
         </GameContext.Provider>
     );
+};
+
+GameProvider.propTypes = {
+    children: PropTypes.node.isRequired,
 };
 
 export default GameContext;

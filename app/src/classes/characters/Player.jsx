@@ -1,6 +1,7 @@
 import Character from './Character';
 import Weapon from '../items/weapons/Weapon';
 import Armor from '../items/armor/Armor';
+import Quest from '../quests/Quest';
 
 class Player extends Character {
 
@@ -11,6 +12,7 @@ class Player extends Character {
         this.equippedWeapon = null;
         this.equippedArmor = null;
         this.inventory = [];
+        this.quests = [];
     }
 
     addItem(item) {
@@ -57,6 +59,35 @@ class Player extends Character {
         } else {
             return `${itemName} not found in inventory.`;
         }
+    }
+
+    // Quest-related methods
+    acceptQuest(quest) {
+        if (quest instanceof Quest) {
+            this.quests.push(quest);
+            quest.startQuest();
+            return `Quest "${quest.name}" accepted!`;
+        } else {
+            throw new Error(`Invalid quest.`);
+        }
+    }
+
+    completeQuest(questName) {
+        const quest = this.quests.find(q => q.name === questName);
+        if (quest && quest.status === 'In Progress') {
+            quest.completeQuest();
+            return `Quest "${quest.name}" completed! Rewards received?`;
+        } else {
+            return `Quest "${questName}" not found or already completed.`;
+        }
+    }
+
+    checkQuestProgress() {
+        return this.quests.map(quest => ({
+            name: quest.name,
+            status: quest.status,
+            objectives: quest.objectives
+        }));
     }
 }
 
