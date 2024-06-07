@@ -5,31 +5,39 @@ import { updateLog } from '../GameUtils/GameUtils';
 import Porter from '../../classes/characters/npc/Porter';
 import defeatMatt from '../../classes/quests/Act 1/defeatMatt';
 
-const useMovement = ( inBattle, playerPosition, map, setPlayerPosition, setInBattle, setEnemy, player, setInventory, setLog, setStoreOpen, storeOpen) => {
+const useMovement = (
+    inBattle, 
+    playerPosition, 
+    map, 
+    setPlayerPosition, 
+    setInBattle, 
+    setEnemy, 
+    player, 
+    setInventory, 
+    setLog, 
+    setStoreOpen, 
+    storeOpen
+) => {
 
     const handleItemEncounter = useCallback((item, x, y) => {
         updateLog(player.addItem(item), setLog);
         setInventory([...player.inventory]);
         map.removeItem(x, y);
-    }, [player, setLog, setInventory, map]); // Add any dependencies here
-    
-    const handleEnemyEncounter = useCallback((enemy) => {
-        updateLog(`You encountered ${enemy.name}`, setLog);
-        setEnemy(enemy);
-        setInBattle(true);
-    }, [setLog, setEnemy, setInBattle]); // Add any dependencies here
+    }, [player, setLog, setInventory, map]);
 
     const handleMove = useCallback((dx, dy) => {
         if (inBattle) {
             updateLog("You can't move during a battle!", setLog);
             return;
         }
-    
+
         const newX = playerPosition.x + dx;
         const newY = playerPosition.y + dy;
+
         if (map.isValidPosition(newX, newY)) {
             setPlayerPosition({ x: newX, y: newY });
             const tileObject = map.getItem(newX, newY);
+
             if (tileObject) {
                 if (tileObject instanceof Item) {
                     handleItemEncounter(tileObject, newX, newY);
@@ -44,16 +52,18 @@ const useMovement = ( inBattle, playerPosition, map, setPlayerPosition, setInBat
                 } else if (tileObject instanceof Enemy) {
                     if (tileObject.name === 'Matt') {
                         defeatMatt.completeObjective(0);
-                        handleEnemyEncounter(tileObject);
-                        defeatMatt.completeQuest();
-                    } else {
-                        handleEnemyEncounter(tileObject);
                     }
+                    setEnemy(tileObject);
+                    setInBattle(true);
+                    
+                    // Uncomment the following else block to handle other enemies
+                    // else {
+                    //     handleEnemyEncounter(tileObject);
+                    // }
                 }
             }
         }
-    }, [inBattle, player, playerPosition, map, setPlayerPosition, setStoreOpen, setLog, handleEnemyEncounter, handleItemEncounter, defeatMatt]);
-    
+    }, [inBattle, player, playerPosition, map, setPlayerPosition, setStoreOpen, setLog, handleItemEncounter]);
 
     const handleKeyDown = useCallback((event) => {
         if (inBattle || storeOpen) return;

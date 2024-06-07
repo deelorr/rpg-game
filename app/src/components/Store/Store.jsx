@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import './Store.css';
 
-const Store = ({ storeItems, handleBuyItem, closeStore }) => {
+const Store = ({ storeInventory, handleBuyItem, closeStore }) => {
     return (
         <div className="storeBox">
             <h2>Store</h2>
             <div className="storeItems">
-                {storeItems.length === 0 && <p className="soldOut">SOLD OUT!</p>}
-                {storeItems.map((item, index) => (
+                {storeInventory.length === 0 && <p className="soldOut">SOLD OUT!</p>}
+                {storeInventory.map((item, index) => (
                     <li key={index}>
                         <div className="itemInfo">
                             <div className="itemNamePrice">{item.name}: {item.price} Coin</div>
@@ -23,13 +23,7 @@ const Store = ({ storeItems, handleBuyItem, closeStore }) => {
 };
 
 Store.propTypes = {
-    storeItems: PropTypes.arrayOf(
-        PropTypes.shape({
-            name: PropTypes.string.isRequired,
-            price: PropTypes.number.isRequired,
-            quantity: PropTypes.number.isRequired, // Ensure quantity is required
-        })
-    ).isRequired,
+    storeInventory: PropTypes.array.isRequired,
     handleBuyItem: PropTypes.func.isRequired,
     closeStore: PropTypes.func.isRequired,
 };

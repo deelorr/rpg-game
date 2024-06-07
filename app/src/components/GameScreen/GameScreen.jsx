@@ -1,6 +1,4 @@
 import { useContext, useEffect } from 'react';
-import Enemy from '../../classes/characters/Enemy';
-import Item from '../../classes/items/Item';
 import PlayerContext from '../../contexts/PlayerContext';
 import InventoryContext from '../../contexts/InventoryContext';
 import GameContext from '../../contexts/GameContext';
@@ -13,9 +11,9 @@ import Debug from '../Debug/Debug';
 import useActions from '../GameUtils/useActions';
 import useMovement from '../GameUtils/useMovement';
 import Grid from '../Grid/Grid';
-import { randomInt, handleBuyItem, closeStore, addGold, updateLog } from '../GameUtils/GameUtils';
+import { initializeGame } from '../GameUtils/InitializeGame';
+import { handleBuyItem, closeStore, addGold, updateLog } from '../GameUtils/GameUtils';
 import './GameScreen.css';
-import Porter from '../../classes/characters/npc/Porter';
 import QuestLog from '../QuestLog/QuestLog';
 
 export default function GameScreen() {
@@ -23,37 +21,33 @@ export default function GameScreen() {
     const { inventory, setInventory, storeInventory, setStoreInventory } = useContext(InventoryContext);
     const { map, log, setLog, inBattle, setInBattle, storeOpen, setStoreOpen } = useContext(GameContext);
 
-    const storeItems = storeInventory;
-
     const handleMove = useMovement(inBattle, playerPosition, map, setPlayerPosition, setInBattle, setEnemy, player, setInventory, setLog, setStoreOpen);
     const handleAction = useActions(player, enemy, inventory, inBattle, setInBattle, setLog, setInventory, map, setEnemy);
 
     useEffect(() => {
-        const initializeGame = () => {
-            const potion = new Item("Potion", (target) => {
-                target.hp += 50;
-            }, true, 10, 1);
-            const porter = new Porter("Porter", "Hello! My name is Porter.");
-
-            map.placeObject(new Enemy("Matt", 100, 5, "Fire"), randomInt(0, map.width), randomInt(0, map.height));
-            map.placeObject(potion, randomInt(0, map.width), randomInt(0, map.height));
-            map.placeObject(potion, randomInt(0, map.width), randomInt(0, map.height));
-            map.placeObject("store", 3, 3);
-            map.placeObject(porter, randomInt(0, map.width), randomInt(0, map.height));
-            updateLog("Game started!", setLog);
-        };
-
-        initializeGame();
-    }, [map, setLog]);
+        initializeGame(map, setLog);
+    }, [map, setLog]); // Empty dependency array ensures this runs only once when the component mounts
 
     return (
         <>
             <div className='gameScreen'>
                 {!storeOpen && (
                     <div className='firstDiv'>
-                        <StatBox player={player} enemy={enemy} inBattle={inBattle} />
-                        <Controls playerPosition={playerPosition} handleMove={handleMove} handleAction={handleAction} />
-                        <Inventory player={player} inventory={inventory} handleAction={handleAction} />
+                        <StatBox 
+                            player={player} 
+                            enemy={enemy} 
+                            inBattle={inBattle} 
+                        />
+                        <Controls 
+                            playerPosition={playerPosition} 
+                            handleMove={handleMove} 
+                            handleAction={handleAction} 
+                        />
+                        <Inventory 
+                            player={player} 
+                            inventory={inventory} 
+                            handleAction={handleAction} 
+                        />
                     </div>
                 )}
                 {storeOpen && (
@@ -64,7 +58,7 @@ export default function GameScreen() {
                             inBattle={inBattle} 
                         />
                         <Store 
-                            storeItems={storeItems} 
+                            storeInventory={storeInventory} 
                             handleBuyItem={(item) => handleBuyItem(item, player, updateLog, setInventory, setStoreInventory, setLog)} 
                             closeStore={() => closeStore(setStoreOpen, updateLog, setLog)} 
                         /> 

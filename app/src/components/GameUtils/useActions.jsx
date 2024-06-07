@@ -1,4 +1,6 @@
 import { updateLog, removeEnemyFromMap } from '../GameUtils/GameUtils';
+import Weapon from '../../classes/items/weapons/Weapon';
+import Armor from '../../classes/items/armor/Armor';
 
 const useActions = (player, enemy, inventory, inBattle, setInBattle, setLog, setInventory, map, setEnemy) => {
     const handleBattleAction = (action) => {
@@ -16,7 +18,20 @@ const useActions = (player, enemy, inventory, inBattle, setInBattle, setLog, set
         }
     };
 
-    const handleAction = (actionType) => {
+    const handleItemAction = (item) => {
+        if (item.isConsumable) {
+            updateLog(player.useItem(item.name, player), setLog);
+            setInventory([...player.inventory]);
+        } else if (item instanceof Weapon) {
+            updateLog(`Equipping weapon: ${item.name}`, setLog);
+            player.equipWeapon(item);
+        } else if (item instanceof Armor) {
+            updateLog(`Equipping armor: ${item.name}`, setLog);
+            player.equipArmor(item);
+        }
+    };
+
+    const handleAction = (actionType, item) => {
         if (!inBattle) {
             switch (actionType) {
                 case 'attack':
@@ -25,13 +40,8 @@ const useActions = (player, enemy, inventory, inBattle, setInBattle, setLog, set
                 case 'special':
                     updateLog("No enemy to use special on!", setLog);
                     break;
-                case 'usePotion':
-                    if (!inventory.some(item => item.name === "Potion")) {
-                        updateLog("No potions in inventory.", setLog);
-                    } else {
-                        updateLog(player.useItem("Potion", player), setLog);
-                        setInventory([...player.inventory]);
-                    }
+                case 'useItem':
+                    handleItemAction(item);
                     break;
                 default:
                     break;
@@ -46,13 +56,8 @@ const useActions = (player, enemy, inventory, inBattle, setInBattle, setLog, set
             case 'special':
                 handleBattleAction(player.useSpecial(enemy));
                 break;
-            case 'usePotion':
-                if (!inventory.some(item => item.name === "Potion")) {
-                    updateLog("No potions in inventory.", setLog);
-                } else {
-                    updateLog(player.useItem("Potion", player), setLog);
-                    setInventory([...player.inventory]);
-                }
+            case 'useItem':
+                handleItemAction(item);
                 break;
             default:
                 break;

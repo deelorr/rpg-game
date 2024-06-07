@@ -34,14 +34,22 @@ const Inventory = ({ player, inventory, handleAction }) => {
                     <p>Empty</p>
                 </div>
             ) : (
-            <div className='invBox'>
-                {filteredInventory.map(({ item, count }, index) => (
-                    <p key={index}>
-                        {item.name}{count > 1 ? ` x${count}` : ''}
-                    </p>
-                ))}
-                <button className='usePotion' onClick={() => handleAction('usePotion')}>Use</button>
-            </div>
+                <div className='invBox'>
+                        <ul>
+                            {filteredInventory.map(({ item, count }, index) => (
+                                <li className='invList' key={index}>
+                                    {item.name}{count > 1 ? ` x${count}` : ''}
+                                    {item.isConsumable && (
+                                        <button 
+                                            className='useButton' 
+                                            onClick={() => handleAction('useItem', item)}>
+                                            Use
+                                        </button>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                </div>
             )}
             </div>
             <div className='bottom-inv'>
