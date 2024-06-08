@@ -4,13 +4,11 @@ import PropTypes from 'prop-types';
 
 const PlayerContext = createContext();
 
-const initialPlayer = new Player("Ally", 150, 10, "Teleport Strike");
-const initialPlayerPosition = { x: 0, y: 0 };
-
-const PlayerProvider = ({ children }) => {
-    const [player, setPlayer] = useState(initialPlayer);
+export const PlayerProvider = ({ children }) => {
+    
+    const [player, setPlayer] = useState(new Player("Ally", 150, 10, "Teleport Strike"));
     const [enemy, setEnemy] = useState(null);
-    const [playerPosition, setPlayerPosition] = useState(initialPlayerPosition);
+    const [playerPosition, setPlayerPosition] = useState({ x:0 , y:0 });
 
     const updatePlayerPosition = (newPosition) => {
         setPlayerPosition(newPosition);
@@ -37,5 +35,4 @@ PlayerProvider.propTypes = {
     children: PropTypes.node.isRequired,
 };
 
-export { PlayerProvider };
 export default PlayerContext;

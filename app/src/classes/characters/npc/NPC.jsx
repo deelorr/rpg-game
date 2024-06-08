@@ -1,12 +1,12 @@
 import Character from '../Character';
 
 class NPC extends Character {
-    constructor(name, hp, dmg) {
+    constructor(name = 'NPC', hp = 100, dmg = 0) {
         super(name, hp, dmg);
     }
 
     talk() {
-        return `Hello, my name is ${this.name}. Please defeat Matt the asshole!`;
+        return `Hello, my name is ${this.name}. Nice to meet you!`;
     }
 
     giveQuest(quest) {

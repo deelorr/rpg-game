@@ -6,16 +6,16 @@ import Armor from '../classes/items/armor/Armor';
 
 const InventoryContext = createContext();
 
-const initialInventory = [];
-const initialStoreInventory = [
-    new Item("Potion", (target) => { target.hp += 50; }, true, 10, 2),
-    new Weapon("Sword", null, 15, 50, 1),
-    new Armor("Shield", null, 20, 50, 1),
-];
+export const InventoryProvider = ({ children }) => {
 
-const InventoryProvider = ({ children }) => {
-    const [inventory, setInventory] = useState(initialInventory);
-    const [storeInventory, setStoreInventory] = useState(initialStoreInventory);
+    const [inventory, setInventory] = useState([]);
+    const [storeInventory, setStoreInventory] = useState([
+        new Item("Potion", (target) => {target.hp += 50}, true, 10, 2),
+        new Weapon("Sword", null, 15, 50, 1),
+        new Weapon("Axe", null, 20, 75, 1),
+        new Armor("Shield", null, 20, 50, 1),
+        new Armor("Helmet", null, 10, 25, 1)
+    ]);
 
     const addItemToInventory = (item) => {
         setInventory((prevInventory) => [...prevInventory, item]);
@@ -45,5 +45,4 @@ InventoryProvider.propTypes = {
     children: PropTypes.node.isRequired,
 };
 
-export { InventoryProvider };
 export default InventoryContext;

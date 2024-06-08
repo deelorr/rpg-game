@@ -1,9 +1,10 @@
-import { useContext } from 'react';
-import './QuestLog.css'; // Assuming you want to style it
 import PlayerContext from '../../contexts/PlayerContext';
+import { useContext } from 'react';
+import './QuestLog.css';
 
 const QuestLog = () => {
     const { player } = useContext(PlayerContext);
+    
     // Add a null check for player
     if (!player) {
         return <p>Loading player data...</p>;

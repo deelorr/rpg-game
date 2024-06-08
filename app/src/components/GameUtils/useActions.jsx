@@ -2,7 +2,17 @@ import { updateLog, removeEnemyFromMap } from '../GameUtils/GameUtils';
 import Weapon from '../../classes/items/weapons/Weapon';
 import Armor from '../../classes/items/armor/Armor';
 
-const useActions = (player, enemy, inventory, inBattle, setInBattle, setLog, setInventory, map, setEnemy) => {
+const useActions = (
+    player, 
+    enemy, 
+    inBattle, 
+    setInBattle, 
+    setLog, 
+    setInventory, 
+    map, 
+    setEnemy
+    ) => {
+        
     const handleBattleAction = (action) => {
         updateLog(action, setLog);
         if (enemy.hp <= 0) {

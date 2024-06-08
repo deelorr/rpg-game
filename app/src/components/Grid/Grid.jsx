@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import Weapon from '../../classes/items/weapons/Weapon';
 import Armor from '../../classes/items/armor/Armor';
 import Item from '../../classes/items/Item';
-import Enemy from '../../classes/characters/Enemy';
+import Enemy from '../../classes/characters/enemies/Enemy';
+import Matt from '../../classes/characters/enemies/Matt';
 import NPC from '../../classes/characters/npc/NPC';
 import Porter from '../../classes/characters/npc/Porter';
 import './Grid.css';
@@ -11,13 +12,16 @@ const Grid = ({ map, playerPosition }) => {
     const getClassForCell = (x, y) => {
         if (x === playerPosition.x && y === playerPosition.y) return 'player';
         const item = map.grid[y][x];
+
         if (item instanceof Weapon) return 'weapon';
         if (item instanceof Armor) return 'armor';
         if (item instanceof Item) return 'item';
         if (item instanceof Enemy) return 'enemy';
+        if (item instanceof Matt) return 'matt';
         if (item instanceof NPC) return 'npc';
         if (item instanceof Porter) return 'porter';
         if (item === 'store') return 'store';
+        
         return 'plainTile';
     };
 

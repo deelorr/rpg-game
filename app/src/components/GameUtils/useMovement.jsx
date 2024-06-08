@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react';
-import Enemy from '../../classes/characters/Enemy';
+import NPC from '../../classes/characters/npc/NPC';
+import Enemy from '../../classes/characters/enemies/Enemy';
 import Item from '../../classes/items/Item';
 import { updateLog } from '../GameUtils/GameUtils';
 import Porter from '../../classes/characters/npc/Porter';
@@ -17,7 +18,7 @@ const useMovement = (
     setLog, 
     setStoreOpen, 
     storeOpen
-) => {
+    ) => {
 
     const handleItemEncounter = useCallback((item, x, y) => {
         updateLog(player.addItem(item), setLog);
@@ -37,18 +38,18 @@ const useMovement = (
         if (map.isValidPosition(newX, newY)) {
             setPlayerPosition({ x: newX, y: newY });
             const tileObject = map.getItem(newX, newY);
-
             if (tileObject) {
-                if (tileObject instanceof Item) {
+                if (tileObject instanceof NPC) {
+                    updateLog(tileObject.talk(), setLog);
+                    if (tileObject instanceof Porter) {
+                        const questMessage = tileObject.giveQuest(defeatMatt, player);
+                        updateLog(questMessage, setLog);
+                        defeatMatt.startQuest(); }
+                } else if (tileObject instanceof Item) {
                     handleItemEncounter(tileObject, newX, newY);
                 } else if (tileObject === "store") {
                     updateLog("You found a store!", setLog);
                     setStoreOpen(true);
-                } else if (tileObject instanceof Porter) {
-                    const questMessage = tileObject.giveQuest(defeatMatt, player);
-                    updateLog(tileObject.talk(), setLog);
-                    updateLog(questMessage, setLog);
-                    defeatMatt.startQuest();
                 } else if (tileObject instanceof Enemy) {
                     if (tileObject.name === 'Matt') {
                         defeatMatt.completeObjective(0);
@@ -63,7 +64,7 @@ const useMovement = (
                 }
             }
         }
-    }, [inBattle, player, playerPosition, map, setPlayerPosition, setStoreOpen, setLog, handleItemEncounter]);
+    }, [inBattle, player, playerPosition, map, setEnemy, setInBattle, setPlayerPosition, setStoreOpen, setLog, handleItemEncounter]);
 
     const handleKeyDown = useCallback((event) => {
         if (inBattle || storeOpen) return;

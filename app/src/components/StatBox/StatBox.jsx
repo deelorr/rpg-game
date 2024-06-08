@@ -1,6 +1,6 @@
 import './StatBox.css';
 import Player from '../../classes/characters/Player';
-import Enemy from '../../classes/characters/Enemy';
+import Enemy from '../../classes/characters/enemies/Enemy';
 
 import PropTypes from 'prop-types';
 
